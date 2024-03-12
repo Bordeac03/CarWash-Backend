@@ -1,6 +1,4 @@
-# CarWash
-
-# Team CRBLA
+# CarWash - Team CRBLA
 
 ## Description
 
