@@ -13,8 +13,8 @@ Our project is going to basically help people and also car washes and their staf
 - Docker
 
 ## Team Members
-# Bordea Cosmin-Andrei 
-# Neacsu Razvan-Florin
-# Popescu Bianca
-# Pomana Laurentiu-Nicolae
-# Stan Antonio-Valentin
+- Bordea Cosmin-Andrei 
+- Neacsu Razvan-Florin
+- Popescu Bianca
+- Pomana Laurentiu-Nicolae
+- Stan Antonio-Valentin
