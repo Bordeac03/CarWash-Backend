@@ -18,3 +18,6 @@ Our project is going to basically help people and also car washes and their staf
 - Popescu Bianca
 - Pomana Laurentiu-Nicolae
 - Stan Antonio-Valentin
+
+## Figma Design Link
+- https://www.figma.com/file/xGImrnSUvRNPkmQPx4hrOw/Untitled?type=design&node-id=0%3A1&mode=design&t=eZkFn7GnHGPu2ZTS-1
