@@ -1,6 +1,7 @@
 package com.car.wash.CRBLA.config;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,8 +18,17 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureException;
+
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    @Value("${spring.application.secretkey}")
+    private String secretKey;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -36,7 +46,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean verifyToken(String token) {
-        // Implement your JWT verification logic here
-        return true;
+        String parts[] = token.split(" ");
+
+        if(parts.length != 2) {
+            return false;
+        }
+
+        if("CRBLA".equals(parts[0]) && secretKey.equals(parts[1])) {
+            try {
+                Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(parts[1]);
+
+                return true;
+            } catch (SignatureException e) {
+                return false;
+            }
+        }
+        return false;
     }
 }

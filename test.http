@@ -2,4 +2,4 @@ GET http://localhost:8080/ HTTP/1.1
 ###
 
 GET http://localhost:8080/test HTTP/1.1
-Authorization: Basic dGVzdDp0ZXN0
+Authorization: CRBLA 9c87dc0e23b0450d4e5fa66b7c372c5444118ace4b49bc682c2130795e1406f8
