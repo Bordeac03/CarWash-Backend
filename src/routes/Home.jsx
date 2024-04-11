@@ -113,7 +113,7 @@ const SearchField = () => {
 	return (
 		<div ref={div} className='searchContainer'>
 			<div>
-				<input onChange={e => debouncedSearch(e.target.value)} type='text' placeholder='Search for coffee...'/>
+				<input onChange={e => debouncedSearch(e.target.value)} type='text' placeholder='Search for carwash...'/>
 				<button type='submit' onClick={() => handleSuggestion(results.length > 0 ? results[0] : undefined)}>
 					<i className='fa fa-search' />
 				</button>
@@ -135,7 +135,7 @@ export const Home = () => {
 	const shops = [
 		{
 			position: [44.46560480895902, 26.085481471163934],
-			name: "BOB Coffee Lab",
+			name: "carwash 1",
 			address: "Piața Charles de Gaulle 3, București",
 			photos: [
 
@@ -156,51 +156,51 @@ export const Home = () => {
 				}
 			
 			],
-			coffeeTypes: [
+			services: [
 			{
-				product: "Espresso",
-				price: "7 RON",
-				size: "50 ml"
+				product: "Basic Wash",
+				price: "50 RON",
+				size: "Small Car"
 			}, 
 			{
-				product: "Cappucino",
-				price: "10 RON",
-				size: "100 ml"
+				product: "Basic Wash",
+				price: "70 RON",
+				size: "Medium Car"
 			},
 			{
-				product: "Latte",
-				price: "12 RON",
-				size: "150 ml"
+				product: "Basic Wash",
+				price: "90 RON",
+				size: "Large Car"
 			},
 			{
-				product: "Mocha",
-				price: "15 RON",
-				size: "200 ml"
+				product: "Deluxe Wash",
+				price: "100 RON",
+				size: "Small Car"
 			},
 			{
-				product: "Macchiato",
-				price: "8 RON",
-				size: "50 ml"
+				product: "Deluxe Wash",
+				price: "120 RON",
+				size: "Medium Car"
 			},
 			{
-				product: "Americano",
-				price: "10 RON",
-				size: "100 ml"
+				product: "Deluxe Wash",
+				price: "140 RON",
+				size: "Large Car"
 			},
 			{
-				product: "Flat White",
-				price: "12 RON",
-				size: "150 ml"
+				product: "Premium Wash",
+				price: "150 RON",
+				size: "Small Car"
 			},
 			{
-				product: "Affogato",
-				price: "15 RON",
-				size: "200 ml"
+				product: "Premium Wash",
+				price: "170 RON",
+				size: "Medium Car"
 			},
 			{
-				product: "Irish Coffee",
-				price: "20 RON",
-				size: "250 ml"
+				product: "Premium Wash",
+				price: "190 RON",
+				size: "Large Car"
 			}
 		],
 			contactInfo: {
@@ -210,7 +210,7 @@ export const Home = () => {
 		},
 		{	
 			position: [44.4614023197076, 26.09392495767213],
-			name: "Origo Dorobanti",
+			name: "carwash2",
 			address: "Calea Dorobanți 186, București 010584",
 			photos: [
 				{
@@ -229,53 +229,53 @@ export const Home = () => {
 					alt: "Origo Dorobanti"
 				}
 			],
-			coffeeTypes: [
-			{
-				product: "Espresso",
-				price: "7 RON",
-				size: "50 ml"
-			}, 
-			{
-				product: "Cappucino",
-				price: "10 RON",
-				size: "100 ml"
-			},
-			{
-				product: "Latte",
-				price: "12 RON",
-				size: "150 ml"
-			},
-			{
-				product: "Mocha",
-				price: "15 RON",
-				size: "200 ml"
-			},
-			{
-				product: "Macchiato",
-				price: "8 RON",
-				size: "50 ml"
-			},
-			{
-				product: "Americano",
-				price: "10 RON",
-				size: "100 ml"
-			},
-			{
-				product: "Flat White",
-				price: "12 RON",
-				size: "150 ml"
-			},
-			{
-				product: "Affogato",
-				price: "15 RON",
-				size: "200 ml"
-			},
-			{
-				product: "Irish Coffee",
-				price: "20 RON",
-				size: "250 ml"
-			}
-		],
+			services: [
+				{
+					product: "Basic Wash",
+					price: "50 RON",
+					size: "Small Car"
+				}, 
+				{
+					product: "Basic Wash",
+					price: "70 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Basic Wash",
+					price: "90 RON",
+					size: "Large Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "100 RON",
+					size: "Small Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "120 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "140 RON",
+					size: "Large Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "150 RON",
+					size: "Small Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "170 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "190 RON",
+					size: "Large Car"
+				}
+			],
 			contactInfo: {
 				phone: "0759 637 564",
 				email: "office@origocoffee.ro"
@@ -283,7 +283,7 @@ export const Home = () => {
 		},
 		{
 			position: [44.465489924792635, 26.08584307116393],
-			name: "New STEAM Coffee Shop",
+			name: "carwash3",
 			address: "Piața Charles de Gaulle 13, București 011857",
 			photos: [
 				{
@@ -302,51 +302,51 @@ export const Home = () => {
 					alt: "New STEAM Coffee Shop"
 				}
 			],
-			coffeeTypes: [
+			services: [
 			{
-				product: "Espresso",
-				price: "7 RON",
-				size: "50 ml"
+				product: "Basic Wash",
+				price: "50 RON",
+				size: "Small Car"
 			}, 
 			{
-				product: "Cappucino",
-				price: "10 RON",
-				size: "100 ml"
+				product: "Basic Wash",
+				price: "70 RON",
+				size: "Medium Car"
 			},
 			{
-				product: "Latte",
-				price: "12 RON",
-				size: "150 ml"
+				product: "Basic Wash",
+				price: "90 RON",
+				size: "Large Car"
 			},
 			{
-				product: "Mocha",
-				price: "15 RON",
-				size: "200 ml"
+				product: "Deluxe Wash",
+				price: "100 RON",
+				size: "Small Car"
 			},
 			{
-				product: "Macchiato",
-				price: "8 RON",
-				size: "50 ml"
+				product: "Deluxe Wash",
+				price: "120 RON",
+				size: "Medium Car"
 			},
 			{
-				product: "Americano",
-				price: "10 RON",
-				size: "100 ml"
+				product: "Deluxe Wash",
+				price: "140 RON",
+				size: "Large Car"
 			},
 			{
-				product: "Flat White",
-				price: "12 RON",
-				size: "150 ml"
+				product: "Premium Wash",
+				price: "150 RON",
+				size: "Small Car"
 			},
 			{
-				product: "Affogato",
-				price: "15 RON",
-				size: "200 ml"
+				product: "Premium Wash",
+				price: "170 RON",
+				size: "Medium Car"
 			},
 			{
-				product: "Irish Coffee",
-				price: "20 RON",
-				size: "250 ml"
+				product: "Premium Wash",
+				price: "190 RON",
+				size: "Large Car"
 			}
 		],
 		contactInfo: {
@@ -356,7 +356,7 @@ export const Home = () => {
 		},
 		{
 			position: [44.421901183309515, 26.020715557672126],
-			name: "Atelierul De Cafea",
+			name: "carwash4",
 			address: "Bucharest 061403",
 			photos: [
 				{
@@ -375,53 +375,53 @@ export const Home = () => {
 					alt: "Atelierul De Cafea"
 				}
 			],
-			coffeeTypes: [
-			{
-				product: "Espresso",
-				price: "7 RON",
-				size: "50 ml"
-			}, 
-			{
-				product: "Cappucino",
-				price: "10 RON",
-				size: "100 ml"
-			},
-			{
-				product: "Latte",
-				price: "12 RON",
-				size: "150 ml"
-			},
-			{
-				product: "Mocha",
-				price: "15 RON",
-				size: "200 ml"
-			},
-			{
-				product: "Macchiato",
-				price: "8 RON",
-				size: "50 ml"
-			},
-			{
-				product: "Americano",
-				price: "10 RON",
-				size: "100 ml"
-			},
-			{
-				product: "Flat White",
-				price: "12 RON",
-				size: "150 ml"
-			},
-			{
-				product: "Affogato",
-				price: "15 RON",
-				size: "200 ml"
-			},
-			{
-				product: "Irish Coffee",
-				price: "20 RON",
-				size: "250 ml"
-			}
-		],
+			services: [
+				{
+					product: "Basic Wash",
+					price: "50 RON",
+					size: "Small Car"
+				}, 
+				{
+					product: "Basic Wash",
+					price: "70 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Basic Wash",
+					price: "90 RON",
+					size: "Large Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "100 RON",
+					size: "Small Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "120 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "140 RON",
+					size: "Large Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "150 RON",
+					size: "Small Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "170 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "190 RON",
+					size: "Large Car"
+				}
+			],
 			contactInfo: {
 				phone: "0733 109 619",
 				email: "leonardcaffe@yahoo.com"
@@ -429,7 +429,7 @@ export const Home = () => {
 		},
 		{
 			position: [44.480024537040045, 26.042033315344252],
-			name: "Tuddav",
+			name: "carwash5",
 			address: "Bulevardul Bucureștii Noi 25, blE 012352",
 			photos: [
 				{
@@ -448,53 +448,53 @@ export const Home = () => {
 					alt: "Tuddav"
 				}
 			],
-			coffeeTypes: [
-			{
-				product: "Espresso",
-				price: "7 RON",
-				size: "50 ml"
-			}, 
-			{
-				product: "Cappucino",
-				price: "10 RON",
-				size: "100 ml"
-			},
-			{
-				product: "Latte",
-				price: "12 RON",
-				size: "150 ml"
-			},
-			{
-				product: "Mocha",
-				price: "15 RON",
-				size: "200 ml"
-			},
-			{
-				product: "Macchiato",
-				price: "8 RON",
-				size: "50 ml"
-			},
-			{
-				product: "Americano",
-				price: "10 RON",
-				size: "100 ml"
-			},
-			{
-				product: "Flat White",
-				price: "12 RON",
-				size: "150 ml"
-			},
-			{
-				product: "Affogato",
-				price: "15 RON",
-				size: "200 ml"
-			},
-			{
-				product: "Irish Coffee",
-				price: "20 RON",
-				size: "250 ml"
-			}
-		],
+			services: [
+				{
+					product: "Basic Wash",
+					price: "50 RON",
+					size: "Small Car"
+				}, 
+				{
+					product: "Basic Wash",
+					price: "70 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Basic Wash",
+					price: "90 RON",
+					size: "Large Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "100 RON",
+					size: "Small Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "120 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Deluxe Wash",
+					price: "140 RON",
+					size: "Large Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "150 RON",
+					size: "Small Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "170 RON",
+					size: "Medium Car"
+				},
+				{
+					product: "Premium Wash",
+					price: "190 RON",
+					size: "Large Car"
+				}
+			],
 			contactInfo: {
 				phone: "0722 582 018",
 				email: "tuddavcoffee@coffee.com"
@@ -506,7 +506,7 @@ export const Home = () => {
 	const [current, setCurrent] = useState(0);
 	const [phLength, setPhLength] = useState(0);
 	const [popup, setPopup] = useState("main");
-	const [selectedCoffee, setSelectedCoffee] = useState([]);
+	const [selectedCarWash, setSelectedCarWash] = useState([]);
 	const [placeOrder, setPlaceOrder] = useState(false);
 
 	const navigate = useNavigate();
@@ -527,7 +527,7 @@ export const Home = () => {
 
 	useEffect(() => {
 		setPopup("main");
-		setSelectedCoffee([]);
+		setSelectedCarWash([]);
 
 		if (placeOrder) {
 			navigate("/order")
@@ -578,7 +578,6 @@ export const Home = () => {
 							<TiArrowBack className='right-arrow'/>
 							<span style={{
 								fontSize: '3rem'
-							
 							}}>Close</span>
 						</button>
 					</div>
@@ -586,9 +585,9 @@ export const Home = () => {
 				<div className={popup === "order" ? "pop-up-scroll" : "pop-up-scroll pop-up-hidden"}>
 					{/* list of coffes */}
 					<div className='list-of-coffes'>
-						<h1>Choose your coffee</h1>
+						<h1>Choose your service</h1>
 						<ul>
-							{location?.coffeeTypes.map((coffee, index) => (
+							{location?.services.map((carwash, index) => (
 								<li key={index}>
 									<div
 										style={{
@@ -606,45 +605,45 @@ export const Home = () => {
 											<span style={{
 												fontSize: "1.5rem",
 												fontWeight: "900"
-											}}>{coffee.product}</span>
+											}}>{carwash.product}</span>
 											<div style={{
 												display: "flex",
 												alignItems: "center",
 												gap: "1rem"
 											}}>
-												<span>{coffee.price}</span>
-												<span>{coffee.size}</span>
+												<span>{carwash.price}</span>
+												<span>{carwash.size}</span>
 											</div>
 										</div>
 
 										<div className='div-plus-minus'>
 											<CiCircleMinus className='plus-minus' onClick={() => {
-												setSelectedCoffee(
+												setSelectedCarWash(
 													prev => {
-														const coffeeIndex = prev.findIndex((item) => item.coffee === coffee)
-														if (coffeeIndex === -1) {
+														const carwashIndex = prev.findIndex((item) => item.carwash === carwash)
+														if (carwashIndex === -1) {
 															return [...prev];
 														} else {
 															const newPrev = [...prev];
-															if (newPrev[coffeeIndex].count > 0) {
-															newPrev[coffeeIndex] = {...newPrev[coffeeIndex], count: newPrev[coffeeIndex].count - 1};
+															if (newPrev[carwashIndex].count > 0) {
+															newPrev[carwashIndex] = {...newPrev[carwashIndex], count: newPrev[carwashIndex].count - 1};
 															}
 															return newPrev;
 														}
 													}
 												);
 											}}/>
-											<span>{selectedCoffee?.find((item) => item.coffee === coffee) ? selectedCoffee?.find((item) => item.coffee === coffee)?.count : 0}</span>
+											<span>{selectedCarWash?.find((item) => item.carwash === carwash) ? selectedCarWash?.find((item) => item.carwash === carwash)?.count : 0}</span>
 											<CiCirclePlus className='plus-minus'
 											onClick={() => {
-												setSelectedCoffee(
+												setSelectedCarWash(
 													prev => {
-														const coffeeIndex = prev.findIndex((item) => item.coffee === coffee)
-														if (coffeeIndex === -1) {
-															return [...prev, {coffee: coffee, count: 1}]
+														const carwashIndex = prev.findIndex((item) => item.carwash === carwash)
+														if (carwashIndex === -1) {
+															return [...prev, {carwash: carwash, count: 1}]
 														} else {
 															const newPrev = [...prev];
-															newPrev[coffeeIndex] = {...newPrev[coffeeIndex], count: newPrev[coffeeIndex].count + 1};
+															newPrev[carwashIndex] = {...newPrev[carwashIndex], count: newPrev[carwashIndex].count + 1};
           													return newPrev;
 														}
 													}
@@ -664,7 +663,7 @@ export const Home = () => {
 					<div className="button-wrapper">
 						<button onClick={() => {
 							setPopup("main");
-							setSelectedCoffee([]);
+							setSelectedCarWash([]);
 					}}>Back</button>
 					</div>
 				</div>
@@ -690,7 +689,7 @@ export const Home = () => {
 				{shops.map((shop, index) => (
 					<Marker key={index} position={shop.position}>
 						<Popup>
-							<span className='span-coffee-shop' onClick={() => setLocation(shop)}>{shop.name}</span>
+							<span className='span-carwash-shop' onClick={() => setLocation(shop)}>{shop.name}</span>
 						</Popup>
 					</Marker>
 				))}

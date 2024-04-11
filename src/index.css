@@ -108,11 +108,11 @@ body {
 	color: var(--darker);
 }
 
-.span-coffee-shop {
+.span-carwash-shop {
 	cursor: pointer;
 }
 
-.span-coffee-shop:hover {
+.span-carwash-shop:hover {
 	color: var(--dark);
 	text-decoration: underline;
 }
