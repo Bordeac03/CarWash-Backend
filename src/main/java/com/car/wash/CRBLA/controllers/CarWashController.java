@@ -3,28 +3,26 @@ package com.car.wash.CRBLA.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.car.wash.CRBLA.config.JwtSecured;
-
 @RestController
-@RequestMapping("/")
-public class ClientUserController {
+@RequestMapping("/carwash")
+public class CarWashController {
 
-    @GetMapping("/test")
-    @JwtSecured
+    @GetMapping("/order")
     @ResponseBody
     public ResponseEntity<String> test(){
-
         return new ResponseEntity<>("{\"key\":\"value\"}", HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @PatchMapping("/order")
     @ResponseBody
-    public ResponseEntity<String> home(){
-
+    public ResponseEntity<String> patchOrder(){
         return new ResponseEntity<>("{\"key\":\"value\"}", HttpStatus.OK);
     }
+
 }
