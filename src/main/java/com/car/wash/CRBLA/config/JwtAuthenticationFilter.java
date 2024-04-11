@@ -48,19 +48,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private boolean verifyToken(String token) {
         String parts[] = token.split(" ");
 
-        if(parts.length != 2) {
+        if(parts.length != 2 || !"CRBLA".equals(parts[0])) {
             return false;
         }
 
-        if("CRBLA".equals(parts[0]) && secretKey.equals(parts[1])) {
-            try {
-                Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(parts[1]);
-
-                return true;
-            } catch (SignatureException e) {
-                return false;
-            }
+        String jwtToken = parts[1];
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            System.out.println(claims.getBody());
+            return true;
+        } catch (SignatureException e) {
+            System.out.println(e);
+            return false;
         }
-        return false;
     }
 }
