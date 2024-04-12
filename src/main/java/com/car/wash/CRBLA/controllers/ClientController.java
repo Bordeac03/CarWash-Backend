@@ -2,6 +2,7 @@ package com.car.wash.CRBLA.controllers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -54,9 +55,14 @@ public class ClientController {
 
     @PatchMapping("/order")
     @ResponseBody
-    public ResponseEntity<String> patchOrder() {
-        
-        return new ResponseEntity<>("{\"key\":\"value\"}", HttpStatus.OK);
+    public ResponseEntity<String> patchOrder(@RequestBody Map<String,String> params) {
+        Long userID = Long.parseLong(params.get("userID"));
+        List<Order> orders = carWashService.findOrdersActiveByUserId(userID);
+        orders.forEach(order -> {
+            order.setCloseBy(true);
+            carWashService.updateOrder(order);
+        });
+        return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
 }

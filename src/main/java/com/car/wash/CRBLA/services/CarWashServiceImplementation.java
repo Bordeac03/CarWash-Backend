@@ -102,20 +102,21 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
     }
 
     @Override
-    public Order findOrderById(Long id) {
-        Order order = null;
-        String sql = "SELECT * FROM booking WHERE ID = ? LIMIT 1;";
+    public List<Order> findOrdersActiveByUserId(Long id) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM booking WHERE userID = ? AND active = 1;";
         try (
                 PreparedStatement findOrder = connection.prepareStatement(sql);
         ) {
             findOrder.setLong(1, id);
             ResultSet rs = findOrder.executeQuery();
-            if (rs.next()){
-                order = new Order(rs.getLong("ID"), rs.getLong("userID"), rs.getLong("carWashID"), rs.getLong("serviceID"), rs.getInt("ts"), rs.getBoolean("closeBy"), rs.getBoolean("active"));
+            while (rs.next()){
+                Order o = new Order(rs.getLong("ID"), rs.getLong("userID"), rs.getLong("carWashID"), rs.getLong("serviceID"), rs.getInt("ts"), rs.getBoolean("closeBy"), rs.getBoolean("active"));
+                orders.add(o);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return order;
+        return orders;
     }
 }
