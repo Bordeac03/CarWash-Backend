@@ -76,12 +76,21 @@ public class AuthController {
 
 	@PostMapping("/login")
 	@ResponseBody
-	public ResponseEntity<String> login(@RequestBody Map<String,String> params, HttpServletResponse response) {
+	public ResponseEntity<String> login(@RequestBody Map<String,String> params, HttpServletResponse response, HttpServletRequest request) {
 		String email = params.get("email");
 		String password = params.get("password");
 
 		User user = userService.findByEmail(email);
 		if (user == null || !user.getPassword().equals(getSHA256Hash(password, user.getId()))) {
+			Cookie[] cookies = request.getCookies();
+			if (cookies != null) {
+				for (Cookie cookie : cookies) {
+					Cookie deleteCookie = new Cookie(cookie.getName(), null);
+					deleteCookie.setMaxAge(0);
+					deleteCookie.setPath("/");
+					response.addCookie(deleteCookie);
+				}
+			}
 			return new ResponseEntity<>("{}", HttpStatus.UNAUTHORIZED);
 		}
 
@@ -98,7 +107,7 @@ public class AuthController {
 
 	@PostMapping("/register")
 	@ResponseBody
-	public ResponseEntity<String> register(@RequestBody Map<String,String> params, HttpServletResponse response) {
+	public ResponseEntity<String> register(@RequestBody Map<String,String> params, HttpServletResponse response,  HttpServletRequest request) {
 		String fullName = params.get("fullName");
 		String email = params.get("email");
 		String password = params.get("password");
@@ -106,6 +115,15 @@ public class AuthController {
 		User user = userService.findByEmail(email);
 		
 		if (user != null) {
+			Cookie[] cookies = request.getCookies();
+			if (cookies != null) {
+				for (Cookie cookie : cookies) {
+					Cookie deleteCookie = new Cookie(cookie.getName(), null);
+					deleteCookie.setMaxAge(0);
+					deleteCookie.setPath("/");
+					response.addCookie(deleteCookie);
+				}
+			}
 			return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
 		}
 
