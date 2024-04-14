@@ -1,10 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css'
 import { Home } from './routes/Home.jsx';
 import Order from './routes/Order.jsx';
 import 'leaflet/dist/leaflet.css';
+import { UserProvider } from './util/UserContext.jsx';
 
 const router = createBrowserRouter([
 	{
@@ -19,6 +20,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+	<UserProvider>
+	    <RouterProvider router={router} />
+	</UserProvider>
   </React.StrictMode>,
 )

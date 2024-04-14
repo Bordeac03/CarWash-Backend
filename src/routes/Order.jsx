@@ -19,7 +19,7 @@ const Order = () => {
             height: "100vh",
             flexDirection: "column",
         }}>
-            <span class="loader"></span>
+            <span className="loader"></span>
             <h1 style={{fontSize: "3rem"}}>Your order is being processed</h1>
         </div>
     </div>

@@ -2,11 +2,13 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react'; 
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
-import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa';
+// import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa';
+import { RiCarWashingFill } from "react-icons/ri";
 import { CiCirclePlus } from "react-icons/ci";
 import { CiCircleMinus } from "react-icons/ci";
 import { TiArrowBack } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
+import { clientInstance } from '../util/instances';
 import L from 'leaflet'
 
 const debounce = (func, delay) => {
@@ -132,7 +134,7 @@ const SearchField = () => {
 
 export const Home = () => {
 
-	const shops = [
+	const [shops, setShops] = useState([
 		{
 			position: [44.46560480895902, 26.085481471163934],
 			name: "carwash 1",
@@ -500,7 +502,7 @@ export const Home = () => {
 				email: "tuddavcoffee@coffee.com"
 			}
 		}
-	];
+	]);
 
 	const [location, setLocation] = useState(null);
 	const [current, setCurrent] = useState(0);
@@ -508,6 +510,7 @@ export const Home = () => {
 	const [popup, setPopup] = useState("main");
 	const [selectedCarWash, setSelectedCarWash] = useState([]);
 	const [placeOrder, setPlaceOrder] = useState(false);
+	const [runLocationOnce, setRunLocationOnce] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -519,11 +522,59 @@ export const Home = () => {
 		setCurrent(current === 0 ? phLength - 1 : current - 1);
 	};
 
+	useEffect(() => {
+		let auxShops = [];
+		clientInstance().get("/carwash").then((res) => {
+			console.log(res.data);
+			res.data.forEach((shop) => {
+				auxShops.push({
+					ID: shop.ID,
+					position: [shop.latitude, shop.longitude],
+					name: shop.name,
+					address: shop.address,
+					contactInfo: {
+						email: shop.contact,
+					}
+				});
+			});
+			setShops(auxShops);
+		}).catch((err) => {
+			console.log(err);
+		});
+	}, []);
+
 	useEffect(() => 
 		{
-			setPhLength(location?.photos.length);
+			location?.photos && setPhLength(location?.photos.length);
+
+			let auxServices = [];
+			if (runLocationOnce) clientInstance().get("/service", {
+				params: {
+					carWashID: location?.ID
+				}
+			})
+			.then((res) => {
+				res.data.forEach((service) => {
+					auxServices.push({
+						ID: service.ID,
+						product: service.name,
+						price: service.price,
+						carWashID: service.carWashID,
+					});
+				})
+				setRunLocationOnce(false);
+				setLocation(prev => {
+					return {
+						...prev,
+						services: auxServices
+					}
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 		}
-	, [location]);
+	, [location, runLocationOnce]);
 
 	useEffect(() => {
 		setPopup("main");
@@ -548,7 +599,7 @@ export const Home = () => {
 				<div className={popup === "main" ? "pop-up-scroll" : "pop-up-scroll pop-up-hidden"}>
 					{/* slider for pictures */}
 					<section className='slider'>
-					<FaArrowAltCircleLeft className='left-arrow' onClick={prevSlide} />
+					{/* <FaArrowAltCircleLeft className='left-arrow' onClick={prevSlide} />
 					{location?.photos?.map((slide, index) => {
 						return (
 							<div
@@ -561,7 +612,10 @@ export const Home = () => {
 						</div>
 						);
 					})}
-					<FaArrowAltCircleRight className='right-arrow' onClick={nextSlide} />
+					<FaArrowAltCircleRight className='right-arrow' onClick={nextSlide} /> */}
+					<div>
+						<RiCarWashingFill size="15rem"></RiCarWashingFill>
+					</div>
 					</section>
 					{/* button wrapper */}
 					<div className="button-wrapper">
@@ -583,11 +637,11 @@ export const Home = () => {
 					</div>
 				</div>
 				<div className={popup === "order" ? "pop-up-scroll" : "pop-up-scroll pop-up-hidden"}>
-					{/* list of coffes */}
+					{/* list of carwashes */}
 					<div className='list-of-coffes'>
 						<h1>Choose your service</h1>
 						<ul>
-							{location?.services.map((carwash, index) => (
+							{location?.services && location?.services.map((carwash, index) => (
 								<li key={index}>
 									<div
 										style={{
@@ -612,7 +666,7 @@ export const Home = () => {
 												gap: "1rem"
 											}}>
 												<span>{carwash.price}</span>
-												<span>{carwash.size}</span>
+												{/* <span>{carwash.size}</span> */}
 											</div>
 										</div>
 
@@ -671,7 +725,7 @@ export const Home = () => {
 					{/* contact info */}
 					<div className='contact-info'>
 						<h1>Contact</h1>
-						<p>Phone: {location?.contactInfo.phone}</p>
+						{/* <p>Phone: {location?.contactInfo.phone}</p> */}
 						<p>Email: {location?.contactInfo.email}</p>
 					</div>
 					<div className="button-wrapper">
@@ -689,7 +743,10 @@ export const Home = () => {
 				{shops.map((shop, index) => (
 					<Marker key={index} position={shop.position}>
 						<Popup>
-							<span className='span-carwash-shop' onClick={() => setLocation(shop)}>{shop.name}</span>
+							<span className='span-carwash-shop' onClick={() => {
+									setLocation(shop);
+									setRunLocationOnce(true);
+								}}>{shop.name}</span>
 						</Popup>
 					</Marker>
 				))}

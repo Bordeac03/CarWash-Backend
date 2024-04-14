@@ -372,6 +372,51 @@ body {
 	animation: rotation 1s linear infinite;
 }
 
+.login-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	gap: 1rem;
+}
+
+.login-wrapper h1 {
+	font-size: 3rem;
+	color: #f0f0f0;
+}
+
+.login-wrapper label {
+	font-size: 1.5rem;
+	color: #f0f0f0;
+}
+
+.login-wrapper input {
+	width: 20rem;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	border: 0.1rem solid #ccc;
+}
+
+.login-wrapper button {
+	width: 21rem;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	border: none;
+	color: #fff;
+	background-color: #007BFF;
+	cursor: pointer;
+}
+
+.login-wrapper button:hover {
+	background-color: #0056b3;
+}
+
+.login-wrapper p {
+	color: red;
+	font-size: 1.2rem;
+}
+
 @keyframes rotation {
 	0% {
 		transform: rotate(0deg);
