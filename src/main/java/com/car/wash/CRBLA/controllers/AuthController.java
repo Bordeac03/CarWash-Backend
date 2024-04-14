@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
@@ -84,10 +86,13 @@ public class AuthController {
 		}
 
 		Cookie cookie = new Cookie("accessToken", generateJwtToken(user.getId(), user.getRole()));
+		Cookie cookie2 = new Cookie("isLoggedIn", "true");
+		cookie2.setMaxAge(3600);
 		cookie.setMaxAge(3600);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
+		response.addCookie(cookie2);
 		return new ResponseEntity<>("{}", HttpStatus.OK);
 	}
 
@@ -110,10 +115,29 @@ public class AuthController {
 		user = userService.updateUser(user);
 
 		Cookie cookie = new Cookie("accessToken", generateJwtToken(user.getId(), user.getRole()));
+		Cookie cookie2 = new Cookie("isLoggedIn", "true");
+		cookie2.setMaxAge(3600);
 		cookie.setMaxAge(3600);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
+		response.addCookie(cookie2);
+
+		return new ResponseEntity<>("{}", HttpStatus.OK);
+	}
+
+	@GetMapping("/logout")
+	@ResponseBody
+	public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				Cookie deleteCookie = new Cookie(cookie.getName(), null);
+				deleteCookie.setMaxAge(0);
+				deleteCookie.setPath("/");
+				response.addCookie(deleteCookie);
+			}
+		}
 
 		return new ResponseEntity<>("{}", HttpStatus.OK);
 	}
