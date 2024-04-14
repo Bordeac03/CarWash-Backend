@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,16 +41,16 @@ public class ClientController {
 
     @GetMapping("/service")
     @ResponseBody
-    public ResponseEntity<String> service(@RequestBody Map<String,String> params) {
-        Long carWashID = Long.parseLong(params.get("carWashID"));
+    public ResponseEntity<String> service(@RequestParam("carWashID") String carWashIDParam) {
+        Long carWashID = Long.parseLong(carWashIDParam);
         ArrayList<Product> services = new ArrayList<>();
         carWashService.findServicesByCarWashId(carWashID).forEach(service -> services.add(service));
         return new ResponseEntity<>(services.toString(), HttpStatus.OK);
     }
-    
+
     @PostMapping("/order")
     @ResponseBody
-    public ResponseEntity<String> postOrder(@RequestBody Map<String,String> params) {
+    public ResponseEntity<String> postOrder(@RequestBody Map<String, String> params) {
         Long userID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long carWashID = Long.parseLong(params.get("carWashID"));
         ArrayList<Long> services = new ArrayList<>();
