@@ -15,7 +15,7 @@ public class CarWashController {
 
     @GetMapping("/order")
     @ResponseBody
-    public ResponseEntity<String> test(){
+    public ResponseEntity<String> getAll(){
         return new ResponseEntity<>("{\"key\":\"value\"}", HttpStatus.OK);
     }
 

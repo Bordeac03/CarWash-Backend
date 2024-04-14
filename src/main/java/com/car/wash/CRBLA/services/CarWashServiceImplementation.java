@@ -56,7 +56,7 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
     public Order saveOrder(Order order) {
         String sql = "INSERT INTO booking (userID, carWashID, serviceID) VALUES (?, ?, ?);";
         try (
-                PreparedStatement saveOrder = connection.prepareStatement(sql);
+                PreparedStatement saveOrder = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
         ) {
             saveOrder.setLong(1, order.getUserID());
             saveOrder.setLong(2, order.getCarWashID());

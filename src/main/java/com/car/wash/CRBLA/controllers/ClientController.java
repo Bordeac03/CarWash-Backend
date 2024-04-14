@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class ClientController {
     @PostMapping("/order")
     @ResponseBody
     public ResponseEntity<String> postOrder(@RequestBody Map<String,String> params) {
-        Long userID = Long.parseLong(params.get("userID"));
+        Long userID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long carWashID = Long.parseLong(params.get("carWashID"));
         ArrayList<Long> services = new ArrayList<>();
         params.forEach((key, value) -> {
@@ -55,8 +56,8 @@ public class ClientController {
 
     @PatchMapping("/order")
     @ResponseBody
-    public ResponseEntity<String> patchOrder(@RequestBody Map<String,String> params) {
-        Long userID = Long.parseLong(params.get("userID"));
+    public ResponseEntity<String> patchOrder() {
+        Long userID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Order> orders = carWashService.findOrdersActiveByUserId(userID);
         orders.forEach(order -> {
             order.setCloseBy(true);
