@@ -36,7 +36,7 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
     @Override
     public List<Order> findOrdersByCarWashId(Long id) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE carWashID = ?;";
+        String sql = "SELECT * FROM orders WHERE carWashID = ? AND active = 1;";
         try (
                 PreparedStatement findOrders = connection.prepareStatement(sql);
         ) {
