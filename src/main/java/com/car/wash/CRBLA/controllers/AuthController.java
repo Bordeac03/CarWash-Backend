@@ -85,10 +85,7 @@ public class AuthController {
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie cookie : cookies) {
-					Cookie deleteCookie = new Cookie(cookie.getName(), null);
-					deleteCookie.setMaxAge(0);
-					deleteCookie.setPath("/");
-					response.addCookie(deleteCookie);
+					cookie.setMaxAge(0);
 				}
 			}
 			return new ResponseEntity<>("{}", HttpStatus.UNAUTHORIZED);
@@ -118,10 +115,7 @@ public class AuthController {
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie cookie : cookies) {
-					Cookie deleteCookie = new Cookie(cookie.getName(), null);
-					deleteCookie.setMaxAge(0);
-					deleteCookie.setPath("/");
-					response.addCookie(deleteCookie);
+					cookie.setMaxAge(0);
 				}
 			}
 			return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
@@ -150,10 +144,7 @@ public class AuthController {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
-				Cookie deleteCookie = new Cookie(cookie.getName(), null);
-				deleteCookie.setMaxAge(0);
-				deleteCookie.setPath("/");
-				response.addCookie(deleteCookie);
+				cookie.setMaxAge(0);
 			}
 		}
 
