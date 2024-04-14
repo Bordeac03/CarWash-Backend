@@ -11,4 +11,5 @@ public interface CarWashService {
     public List<Order> findOrdersByCarWashId(Long id);
     public Order saveOrder(Order order);
     public void updateOrder(Order order);
+    public CarWash findCarWashesByLocation(Long id);
 }

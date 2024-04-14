@@ -15,4 +15,9 @@ public class Order {
     private Integer ts;
     private Boolean closeBy;
     private Boolean active;
+
+    @Override
+    public String toString() {
+        return "{\"ID\":\"" + id + "\",\"userID\":\"" + userID + "\",\"carWashID\":\"" + carWashID + "\",\"serviceID\":\"" + serviceID + "\",\"ts\":\"" + ts + "\",\"closeBy\":\"" + closeBy + "\",\"active\":\"" + active + "\"}";
+    }
 }
