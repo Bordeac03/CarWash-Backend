@@ -95,6 +95,8 @@ public class AuthController {
 		Cookie cookie2 = new Cookie("isLoggedIn", "true");
 		cookie2.setMaxAge(3600);
 		cookie.setMaxAge(3600);
+		cookie2.setPath("/");
+		cookie.setPath("/");
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
@@ -130,6 +132,8 @@ public class AuthController {
 		Cookie cookie2 = new Cookie("isLoggedIn", "true");
 		cookie2.setMaxAge(3600);
 		cookie.setMaxAge(3600);
+		cookie2.setPath("/");
+		cookie.setPath("/");
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
