@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.car.wash.CRBLA.domain.Order;
+import com.car.wash.CRBLA.domain.Product;
 import com.car.wash.CRBLA.services.CarWashService;
 
 @RestController
@@ -37,6 +38,15 @@ public class ClientController {
         return new ResponseEntity<>(carWashes.toString(), HttpStatus.OK);
     }
 
+    @GetMapping("/service")
+    @ResponseBody
+    public ResponseEntity<String> service(@RequestBody Map<String,String> params) {
+        Long carWashID = Long.parseLong(params.get("carWashID"));
+        ArrayList<Product> services = new ArrayList<>();
+        carWashService.findServicesByCarWashId(carWashID).forEach(service -> services.add(service));
+        return new ResponseEntity<>(services.toString(), HttpStatus.OK);
+    }
+    
     @PostMapping("/order")
     @ResponseBody
     public ResponseEntity<String> postOrder(@RequestBody Map<String,String> params) {

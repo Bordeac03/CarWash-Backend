@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.car.wash.CRBLA.db.CoreJDBCDao;
 import com.car.wash.CRBLA.domain.CarWash;
 import com.car.wash.CRBLA.domain.Order;
+import com.car.wash.CRBLA.domain.Product;
 
 @Service
 public class CarWashServiceImplementation extends CoreJDBCDao implements CarWashService {
@@ -136,5 +137,24 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
             e.printStackTrace();
         }
         return cw;
+    }
+
+    @Override
+    public List<Product> findServicesByCarWashId(Long id) {
+        List<Product> services = new ArrayList<>();
+        String sql = "SELECT * FROM carWashService WHERE carWashID = ? AND active = 1;";
+        try (
+                PreparedStatement findServices = connection.prepareStatement(sql);
+        ) {
+            findServices.setLong(1, id);
+            ResultSet rs = findServices.executeQuery();
+            while (rs.next()){
+                Product s = new Product(rs.getLong("ID"), rs.getString("name"), rs.getLong("carWashID"), rs.getDouble("price"), rs.getBoolean("active"));
+                services.add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return services;
     }
 }

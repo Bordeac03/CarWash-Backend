@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.car.wash.CRBLA.domain.CarWash;
 import com.car.wash.CRBLA.domain.Order;
+import com.car.wash.CRBLA.domain.Product;
 
 public interface CarWashService {
     public List<CarWash> findAll();
@@ -12,4 +13,5 @@ public interface CarWashService {
     public Order saveOrder(Order order);
     public void updateOrder(Order order);
     public CarWash findCarWashesByLocation(Long id);
+    public List<Product> findServicesByCarWashId(Long id);
 }
