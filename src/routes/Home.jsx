@@ -5,7 +5,8 @@ import { OpenStreetMapProvider } from 'leaflet-geosearch';
 // import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa';
 import { RiCarWashingFill } from "react-icons/ri";
 import { CiCirclePlus } from "react-icons/ci";
-import { CiCircleMinus } from "react-icons/ci";
+import { CiCircleMinus, CiSearch } from "react-icons/ci";
+import { IoMdClose } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
 import { clientInstance } from '../util/instances';
@@ -117,9 +118,9 @@ const SearchField = () => {
 	return (
 		<div ref={div} className='searchContainer'>
 			<div>
-				<input onChange={e => debouncedSearch(e.target.value)} type='text' placeholder='Search for carwash...'/>
+				<input onChange={e => debouncedSearch(e.target.value)} type='text' placeholder='Search a carwash...'/>
 				<button type='submit' onClick={() => handleSuggestion(results.length > 0 ? results[0] : undefined)}>
-					<i className='fa fa-search' />
+					<CiSearch style = {{height:'100%', fontSize:'1.5rem'}}/>
 				</button>
 			</div>
 			<div className='suggestionsContainer'>
@@ -624,7 +625,6 @@ export const Home = () => {
 					{/* button wrapper */}
 					<div className="button-wrapper">
 						<button onClick={() => setPopup("order")}>Order</button>
-						<button onClick={() => setPopup("contact")}>Contact</button>
 					</div>
 					<div className="button-wrapper">
 						<button style={{
@@ -634,10 +634,9 @@ export const Home = () => {
 							gap: '.1rem'
 						}} onClick={() => setLocation(null)}>
 							<TiArrowBack className='right-arrow'/>
-							<span style={{
-								fontSize: '3rem'
-							}}>Close</span>
+							<span>Close</span>
 						</button>
+						<button onClick={() => setPopup("contact")}>Contact</button>
 					</div>
 				</div>
 				<div className={popup === "order" ? "pop-up-scroll" : "pop-up-scroll pop-up-hidden"}>
@@ -715,7 +714,9 @@ export const Home = () => {
 					</div>
 					<div className="button-wrapper">
 						<button onClick={() => {
-							setPlaceOrder(true);
+							if(selectedServices.length > 0) {
+								setPlaceOrder(true);
+							}
 						}}>Place Order</button>
 					</div>
 					<div className="button-wrapper">
@@ -739,19 +740,7 @@ export const Home = () => {
 					</div>
 				</div>
 			</div>
-			{userContext.activeOrder && <button style={{ 
-				zIndex: "9999", 
-				position: "fixed", 
-				bottom: "20px",
-				left: "50%", 
-				transform: "translateX(-50%)", 
-				backgroundColor: "green",
-				padding: "10px 20px", 
-				color: "white", 
-				border: "none",
-				borderRadius: "5px", 
-				fontSize: "3rem"
-			}} onClick={() => {
+			{userContext.activeOrder && <button className='close-by-button' onClick={() => {
 				clientInstance().patch("/order")
 				.then((res) => {
 					if (res.status === 200) {
@@ -762,7 +751,7 @@ export const Home = () => {
 				.catch((err) => {
 					console.log(err);
 				});
-			}}>Close-By Button</button>}
+			}}>I am close !</button>}
 			<MapContainer style={{ width: "100%", height: "100%" }} center={[44.4268, 26.1025]} zoom={18} zoomControl={false} minZoom={17}>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

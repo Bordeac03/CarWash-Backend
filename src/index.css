@@ -52,10 +52,11 @@ body {
 	top: 1.5em;
 	z-index: 9999;
 	background-color: var(--lightest);
-	border-radius: 0.5rem;
+	border-radius: 1rem;
 	padding: .25em;
 	width: min(60em, 80%);
 	cursor: pointer;
+	box-shadow: 0px 10px 16px rgba(0, 0, 0, .4);
 }
 
 .searchContainer > div:first-child {
@@ -71,7 +72,8 @@ body {
 	font-size: 1.5em;
 	padding: 0.5em;
 	border: none;
-	color: var(--lightGray); 
+	border-radius: 2rem;
+	color: var(--dark); 
 	background-color: var(--lightest);
 	flex-grow: 1;
 	flex-shrink: 1;
@@ -83,7 +85,7 @@ body {
 
 
 .searchContainer > div > input::placeholder {
-	color: var(--lightGray); 
+	color: var(--dark); 
 }	
 
 
@@ -91,8 +93,9 @@ body {
 	font-size: 1.5em;
 	padding: 0.5em;
 	border: none;
+	border-radius: 2rem;
 	background-color: var(--lightest);
-	color: var(--darkest);
+	color: var(--dark);
 }
 
 .searchContainer > div > button:focus {
@@ -202,8 +205,8 @@ body {
 }
 
 .right-arrow {
-	font-size: 3rem;
-	color: var(--accents);
+	font-size: 2rem;
+	color: var(--accent);
 	z-index: 10;
 	cursor: pointer;
 	user-select: none;
@@ -211,10 +214,19 @@ body {
 
 .left-arrow {
 	font-size: 3rem;
-	color: var(--accents);
+	color: var(--accent);
 	z-index: 10;
 	cursor: pointer;
 	user-select: none;
+}
+
+.close-icon {
+	font-size: 2rem;
+	color: var(--accent);
+	z-index: 10;
+	cursor: pointer;
+	user-select: none;
+	margin-top: .6rem;
 }
 
 .slide {
@@ -243,14 +255,18 @@ body {
 	font-weight: 800;
 	padding: 1rem;
 	border-radius: 1rem;
-	border: .4rem solid var(--accent);
+	border: .12rem solid var(--normal);
 	background-color: var(--lightest);
+	color: var(--normal);
+	font-weight: 200;
 	cursor: pointer;
 	transition: flex 0.2s ease-in-out;
 }
 
 .button-wrapper > button:hover {
 	background-color: var(--normal);
+	color: var(--lightest);
+	font-weight: 200;
 }
 
 .button-wrapper > button:active {
@@ -317,7 +333,7 @@ body {
 }
 
 .list-of-coffes>ul>li:hover {
-	background-color: var(--dark);
+	background-color: var(--lighter);
 }
 
 .list-of-coffes>ul>li:active {
@@ -383,19 +399,24 @@ body {
 
 .login-wrapper h1 {
 	font-size: 3rem;
-	color: #f0f0f0;
+	color: var(--normal);
 }
 
 .login-wrapper label {
-	font-size: 1.5rem;
-	color: #f0f0f0;
+	font-size: 1.8rem;
+	font-weight: 600;
+	color: var(--normal);
 }
 
 .login-wrapper input {
 	width: 20rem;
 	padding: 1rem;
-	border-radius: 0.5rem;
+	background-color: var(--lightest);
+	color: var(--normal);
+	font-size: 1.2rem;
+	border-radius: 0.7rem;
 	border: 0.1rem solid #ccc;
+	box-shadow: 0px 3px 8px rgba(0, 0, 0, .4);
 }
 
 .login-wrapper button {
@@ -403,18 +424,43 @@ body {
 	padding: 1rem;
 	border-radius: 0.5rem;
 	border: none;
-	color: #fff;
-	background-color: #007BFF;
+	color: var(--normal);
+	font-weight: 400;
+	font-size: 1.5rem;
+	background-color: var(--lightest);
 	cursor: pointer;
+	border: .12rem solid var(--normal);
 }
 
 .login-wrapper button:hover {
-	background-color: #0056b3;
+	background-color: var(--normal);
+	color: var(--lightest);
 }
 
 .login-wrapper p {
 	color: red;
 	font-size: 1.2rem;
+}
+
+.close-by-button {
+	z-index: 9999;
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: var(--lightest);
+	padding: 10px 20px;
+	color: var(--normal);
+	border: .12rem solid var(--normal);
+	border-radius: 1.5rem;
+	font-size: 3rem;
+	user-select: none;
+	cursor: pointer;
+}
+
+.close-by-button:hover {
+	background-color: var(--normal);
+	color: var(--lightest);
 }
 
 @keyframes rotation {
@@ -463,31 +509,31 @@ body {
 }
 
 @media (prefers-color-scheme: light) {
-	:root {
-		--lightest: #B3E0E6;
-		--lighter: #80CCE3;
-		--light: #4DB8DF;
-		--normal: #1AA4DB;
-		--dark: #008099;
-		--darker: #00667A;
-		--darkest: #004C5C;
-		--accent: black;
-		--accent2: white;
-		--lightGray: #7A8C8D;
-	}
+    :root {
+        --lightest: white;
+        --lighter: lightgray;
+        --light: #708090; /* This is a greyer version of #264E86 */
+        --normal: #264E86;
+        --dark: black;
+        --darker: #00667A;
+        --darkest: #004C5C;
+        --accent: black;
+        --accent2: white;
+        --lightGray: #7A8C8D;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
-		--lightest: #004C5C;
-		--lighter: #00667A;
-		--light: #008099;
-		--normal: #1AA4DB;
-		--dark: #4DB8DF;
-		--darker: #80CCE3;
-		--darkest: #B3E0E6;
-		--accent: white;
+    :root {
+		--lightest: white;
+        --lighter: lightgray;
+        --light: #708090; /* This is a greyer version of #264E86 */
+        --normal: #264E86;
+        --dark: black;
+        --darker: #00667A;
+        --darkest: #004C5C;
+        --accent: black;
+        --accent2: white;
+        --lightGray: #7A8C8D;
 	}
 }
-
-
