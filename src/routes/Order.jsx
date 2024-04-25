@@ -1,6 +1,7 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { clientInstance } from '../util/instances';
+import { UserContext } from '../util/UserContext';
 import Cookies from 'js-cookie';
 
 
@@ -9,6 +10,7 @@ const Order = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const order = location.state;
+    const userContext = useContext(UserContext);
 
     useEffect(() => {
         let objectToSend = {
@@ -30,6 +32,7 @@ const Order = () => {
         .then((res) => {
             if (res.status === 200) {
                 Cookies.set("order", "true");
+                userContext.setOrder(true);
                 navigate("/");
             }
         })
@@ -37,6 +40,7 @@ const Order = () => {
             console.log(err);
             setDisplayError(true);
             Cookies.remove("order");
+            useContext.setOrder(false);
             setTimeout(() => {
                 navigate("/");
             }, 5000);
