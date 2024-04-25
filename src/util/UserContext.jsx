@@ -6,10 +6,13 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
+    const [activeOrder, setActiveOrder] = useState(false);
 
     const userConfig = {
         loggedIn,
         setLoggedIn,
+        activeOrder,
+        setActiveOrder,
     };
 
     useLayoutEffect(() => {
@@ -18,6 +21,12 @@ export const UserProvider = ({ children }) => {
             setLoggedIn(true);
         } else {
             setLoggedIn(false);
+        }
+
+        if (Cookies.get('order') === 'true') {
+            setActiveOrder(true);
+        } else {
+            setActiveOrder(false);
         }
 
         return () => {};

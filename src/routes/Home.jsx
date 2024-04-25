@@ -1,6 +1,6 @@
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useRef, useState } from 'react'; 
+import { useEffect, useRef, useState, useContext } from 'react'; 
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 // import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa';
 import { RiCarWashingFill } from "react-icons/ri";
@@ -9,6 +9,8 @@ import { CiCircleMinus } from "react-icons/ci";
 import { TiArrowBack } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
 import { clientInstance } from '../util/instances';
+import { UserContext } from '../util/UserContext';
+import Cookies from 'js-cookie';
 import L from 'leaflet'
 
 const debounce = (func, delay) => {
@@ -508,9 +510,11 @@ export const Home = () => {
 	const [current, setCurrent] = useState(0);
 	const [phLength, setPhLength] = useState(0);
 	const [popup, setPopup] = useState("main");
-	const [selectedCarWash, setSelectedCarWash] = useState([]);
+	const [selectedServices, setSelectedServices] = useState([]);
 	const [placeOrder, setPlaceOrder] = useState(false);
 	const [runLocationOnce, setRunLocationOnce] = useState(false);
+
+	const userContext = useContext(UserContext);
 
 	const navigate = useNavigate();
 
@@ -525,7 +529,6 @@ export const Home = () => {
 	useEffect(() => {
 		let auxShops = [];
 		clientInstance().get("/carwash").then((res) => {
-			console.log(res.data);
 			res.data.forEach((shop) => {
 				auxShops.push({
 					ID: shop.ID,
@@ -577,15 +580,16 @@ export const Home = () => {
 	, [location, runLocationOnce]);
 
 	useEffect(() => {
-		setPopup("main");
-		setSelectedCarWash([]);
-
-		if (placeOrder) {
-			navigate("/order")
+		if (placeOrder && selectedServices.length > 0) {
+			navigate("/order", {state: {services: selectedServices, carWashID: location?.ID}})
 		}
-
+		
 		return () => {
-			setPlaceOrder(false);
+			if (placeOrder && selectedServices.length > 0) {
+				setPlaceOrder(false);
+				setPopup("main");
+				setSelectedServices([]);
+			}
 		};
 	}, [placeOrder]);
 	
@@ -641,7 +645,7 @@ export const Home = () => {
 					<div className='list-of-coffes'>
 						<h1>Choose your service</h1>
 						<ul>
-							{location?.services && location?.services.map((carwash, index) => (
+							{location?.services && location?.services.map((service, index) => (
 								<li key={index}>
 									<div
 										style={{
@@ -659,22 +663,22 @@ export const Home = () => {
 											<span style={{
 												fontSize: "1.5rem",
 												fontWeight: "900"
-											}}>{carwash.product}</span>
+											}}>{service.product}</span>
 											<div style={{
 												display: "flex",
 												alignItems: "center",
 												gap: "1rem"
 											}}>
-												<span>{carwash.price}</span>
-												{/* <span>{carwash.size}</span> */}
+												<span>{service.price}</span>
+												{/* <span>{service.size}</span> */}
 											</div>
 										</div>
 
 										<div className='div-plus-minus'>
 											<CiCircleMinus className='plus-minus' onClick={() => {
-												setSelectedCarWash(
+												setSelectedServices(
 													prev => {
-														const carwashIndex = prev.findIndex((item) => item.carwash === carwash)
+														const carwashIndex = prev.findIndex((item) => item.service === service)
 														if (carwashIndex === -1) {
 															return [...prev];
 														} else {
@@ -687,14 +691,14 @@ export const Home = () => {
 													}
 												);
 											}}/>
-											<span>{selectedCarWash?.find((item) => item.carwash === carwash) ? selectedCarWash?.find((item) => item.carwash === carwash)?.count : 0}</span>
+											<span>{selectedServices?.find((item) => item.service === service) ? selectedServices?.find((item) => item.service === service)?.count : 0}</span>
 											<CiCirclePlus className='plus-minus'
 											onClick={() => {
-												setSelectedCarWash(
+												setSelectedServices(
 													prev => {
-														const carwashIndex = prev.findIndex((item) => item.carwash === carwash)
+														const carwashIndex = prev.findIndex((item) => item.service === service)
 														if (carwashIndex === -1) {
-															return [...prev, {carwash: carwash, count: 1}]
+															return [...prev, {service: service, carWashID: location?.ID, count: 1}]
 														} else {
 															const newPrev = [...prev];
 															newPrev[carwashIndex] = {...newPrev[carwashIndex], count: newPrev[carwashIndex].count + 1};
@@ -717,7 +721,7 @@ export const Home = () => {
 					<div className="button-wrapper">
 						<button onClick={() => {
 							setPopup("main");
-							setSelectedCarWash([]);
+							setSelectedServices([]);
 					}}>Back</button>
 					</div>
 				</div>
@@ -735,6 +739,30 @@ export const Home = () => {
 					</div>
 				</div>
 			</div>
+			{userContext.activeOrder && <button style={{ 
+				zIndex: "9999", 
+				position: "fixed", 
+				bottom: "20px",
+				left: "50%", 
+				transform: "translateX(-50%)", 
+				backgroundColor: "green",
+				padding: "10px 20px", 
+				color: "white", 
+				border: "none",
+				borderRadius: "5px", 
+				fontSize: "3rem"
+			}} onClick={() => {
+				clientInstance().patch("/order")
+				.then((res) => {
+					if (res.status === 200) {
+						userContext.setActiveOrder(false);
+						Cookies.remove('order');
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+			}}>Close-By Button</button>}
 			<MapContainer style={{ width: "100%", height: "100%" }} center={[44.4268, 26.1025]} zoom={18} zoomControl={false} minZoom={17}>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -744,8 +772,10 @@ export const Home = () => {
 					<Marker key={index} position={shop.position}>
 						<Popup>
 							<span className='span-carwash-shop' onClick={() => {
-									setLocation(shop);
-									setRunLocationOnce(true);
+									if (!userContext.activeOrder) {
+										setLocation(shop);
+										setRunLocationOnce(true);
+									}
 								}}>{shop.name}</span>
 						</Popup>
 					</Marker>
