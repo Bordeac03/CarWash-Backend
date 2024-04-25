@@ -30,7 +30,7 @@ public class CarWashController {
 
     @GetMapping("/order")
     @ResponseBody
-    public ResponseEntity<String> getAllOrders(){
+    public ResponseEntity<String> getAllOrders() {
         Long cwID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CarWash cw = carWashService.findCarWashesByLocation(cwID);
         List<Order> orders = carWashService.findOrdersByCarWashId(cw.getId());
@@ -39,7 +39,7 @@ public class CarWashController {
 
     @PatchMapping("/order")
     @ResponseBody
-    public ResponseEntity<String> patchOrder(@RequestBody Map<String,String> params){
+    public ResponseEntity<String> patchOrder(@RequestBody Map<String, String> params) {
         Long cwID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userID = Long.parseLong(params.get("userID"));
         List<Order> orders = carWashService.findOrdersActiveByUserId(userID);

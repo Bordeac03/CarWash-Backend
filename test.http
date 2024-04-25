@@ -6,6 +6,10 @@ Content-Type: application/json
     "password": "1234"
 }
 ###
+GET http://localhost:8080/auth/logout HTTP/1.1
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTMwODMzNTEsImV4cCI6MTcxMzA4Njk1MX0.16No6tc_ZC7BUNV23FAPEh_Cami5aZqPFseqcvlt6BE    
+
+###
 POST http://localhost:8080/auth/register HTTP/1.1
 Content-Type: application/json
 
