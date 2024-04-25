@@ -32,7 +32,7 @@ const Order = () => {
         .then((res) => {
             if (res.status === 200) {
                 Cookies.set("order", "true");
-                userContext.setOrder(true);
+                userContext.setActiveOrder(true);
                 navigate("/");
             }
         })
@@ -40,7 +40,7 @@ const Order = () => {
             console.log(err);
             setDisplayError(true);
             Cookies.remove("order");
-            useContext.setOrder(false);
+            useContext.setActiveOrder(false);
             setTimeout(() => {
                 navigate("/");
             }, 5000);
