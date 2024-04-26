@@ -20,7 +20,7 @@ export const UserProvider = ({ children }) => {
         if (Cookies.get('isLoggedIn') === 'true') {
             setLoggedIn(true);
         } else {
-            setLoggedIn(false);
+            setLoggedIn(true);
         }
 
         if (Cookies.get('order') === 'true') {

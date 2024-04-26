@@ -463,6 +463,50 @@ body {
 	color: var(--lightest);
 }
 
+.carwash-list {
+    gap: 1rem;
+    width: 70%;
+    margin-left: 15%;
+    border: 1.3px solid var(--normal);
+    border-radius: .5rem;
+    background-color: var(--lightest);
+    border-collapse: separate; /* Add this */
+}
+
+.carwash-list td {
+    box-sizing: border-box;
+    border-right: 1px solid black;
+    text-align: center;
+    width: 25%;
+    list-style-type: none;
+    padding: .3rem;
+    cursor: pointer;
+}
+
+.carwash-list td:last-child {
+    border-right: none;
+}
+
+.carwash-list tbody tr {
+    box-sizing: border-box;
+    border-bottom: 1px solid black;
+}
+
+.carwash-list > tr > td > button{
+    font-size: 2rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: none;
+    color: var(--normal);
+    background-color: var(--lightest);
+    font-weight: 200;
+    cursor: pointer;
+    transition: flex 0.2s ease-in-out;
+    width:100%;
+}
+
+
+
 @keyframes rotation {
 	0% {
 		transform: rotate(0deg);
