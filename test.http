@@ -28,10 +28,10 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzE
 ###
 POST http://localhost:8080/admin/addCarWash HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTMxMTU2NTcsImV4cCI6MTcxMzExOTI1N30.wAVhIEGKUZFybC8KNkOyczdfaQxf6baK65NutcT87Sg;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyMDQ5NDksImV4cCI6MTcxNDIwODU0OX0.AnHIQ2Gc7NyNIXktdGSTyzZ-cnOsA41C4hCR_wxY-5A
 
 {
-    "name": "CarWash",
+    "name": "CarWash2",
     "address": "Address",
     "latitude": 123.123,
     "longitude": 123.123,
@@ -39,3 +39,9 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
     "openTime": "08:00",
     "contact": "123456789"
 }
+
+
+###
+GET http://localhost:8080/admin/carwash?searchString=CarWash2&pageNumber=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyMDQ5NDksImV4cCI6MTcxNDIwODU0OX0.AnHIQ2Gc7NyNIXktdGSTyzZ-cnOsA41C4hCR_wxY-5A
