@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -38,7 +39,7 @@ public class AdminController {
     }
     
 
-    @PostMapping("/addCarWash")
+    @PostMapping("/carwash")
     @ResponseBody
     public ResponseEntity<String> addCarWash(@RequestBody Map<String, String> entity) {
         CarWash newCarWash = new CarWash();
@@ -52,6 +53,22 @@ public class AdminController {
         adminService.addCarWash(newCarWash);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    @PatchMapping("/carwash")
+    @ResponseBody
+    public ResponseEntity<String> updateCarWash(@RequestBody Map<String, String> entity) {
+        CarWash newCarWash = new CarWash();
+        newCarWash.setId(Long.parseLong(entity.get("id")));
+        newCarWash.setName(entity.get("name"));
+        newCarWash.setAddress(entity.get("address"));
+        newCarWash.setLatitude(Double.parseDouble(entity.get("latitude")));
+        newCarWash.setLongitude(Double.parseDouble(entity.get("longitude")));
+        newCarWash.setActive(Boolean.parseBoolean(entity.get("active")));
+        newCarWash.setOpenTime(entity.get("openTime"));
+        newCarWash.setContact(entity.get("contact"));
+
+        return new ResponseEntity<>(adminService.updateCarWash(newCarWash).toString(), HttpStatus.OK);
     }
 
     @PostMapping("/addProduct")

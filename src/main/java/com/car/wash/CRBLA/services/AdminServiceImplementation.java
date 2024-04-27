@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -135,6 +136,76 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
 
         return json;
+    }
+
+    public boolean idExists(Long ID) {
+        String sql = "SELECT 1 FROM carWash WHERE id = ?;";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setLong(1, ID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public CarWash updateCarWash(CarWash carWash) {
+        StringBuilder sql = new StringBuilder("UPDATE carWash SET ");
+
+        List<Object> parameters = new ArrayList<>();
+        if (carWash.getName() != null) {
+            sql.append("name = ?, ");
+            parameters.add(carWash.getName());
+        }
+        if (carWash.getAddress() != null) {
+            sql.append("address = ?, ");
+            parameters.add(carWash.getAddress());
+        }
+        if (carWash.getLatitude() != 0) {
+            sql.append("latitude = ?, ");
+            parameters.add(carWash.getLatitude());
+        }
+        if (carWash.getLongitude() != 0) {
+            sql.append("longitude = ?, ");
+            parameters.add(carWash.getLongitude());
+        }
+        if (carWash.isActive() != false) {
+            sql.append("active = ?, ");
+            parameters.add(carWash.isActive());
+        }
+        if (carWash.getOpenTime() != null) {
+            sql.append("openTime = ?, ");
+            parameters.add(carWash.getOpenTime());
+        }
+        if (carWash.getContact() != null) {
+            sql.append("contact = ?, ");
+            parameters.add(carWash.getContact());
+        }
+        sql.deleteCharAt(sql.length() - 2);
+        sql.append(" WHERE id = ?;");
+        if(!idExists(carWash.getId())) {
+            throw new IllegalArgumentException("CarWash with given ID does not exist!");
+        } else {
+            parameters.add(carWash.getId());
+        }
+
+        try (
+            PreparedStatement updateCarWash = connection.prepareStatement(sql.toString());
+        ) {
+            for (int i = 0; i < parameters.size(); i++) {
+                updateCarWash.setObject(i + 1, parameters.get(i));
+            }
+            updateCarWash.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
     }  
+    return carWash;
+
+}
     
 }

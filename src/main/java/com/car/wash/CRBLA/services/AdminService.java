@@ -7,6 +7,7 @@ import com.car.wash.CRBLA.domain.User;
 
 public interface AdminService {
     public String getCarwash(String searchString, int pageNumber, int limit);
+    public CarWash updateCarWash(CarWash carWash);
     public CarWash addCarWash(CarWash carWash);
     public Product addProduct(Product product);
     public User addUser(User user);

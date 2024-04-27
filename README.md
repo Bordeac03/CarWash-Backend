@@ -7,7 +7,7 @@
     -> REGISTER DIFERENTIAT PENTRU FIECARE ROL, UN USER CU ROL DE CLIENT NU TREBUIE SA POATA SA ISI CREEZE UN CONT DE TIP ADMIN SAU CARWASH
 
 2. ADMIN CONTROLLER MODULE
-    -> GET: /admin/carwash - query params: search=?, page=?, limit=? (
+    <!-- -> GET: /admin/carwash - query params: search=?, page=?, limit=? (
         -> search: Vei primi un string cu adresa sau numele carwash-ului si vei cauta toate carwash-urile care contin acel string in nume sau adresa, daca nu primesti nimic, vei returna toate carwash-urile in limita paginarii
         -> page: Vei primi un numar intreg care reprezinta pagina pe care vrei sa o afisezi (deoarece nu e ok sa afisam toate carwash-urile o data, ar fi ineficient, motiv pentru care vom folosi paginarea)
         -> limit: Vei primi un numar intreg care reprezinta maximul de carwash-uri pe care vrei sa le afisezi pe o pagina
@@ -30,18 +30,18 @@
                 }, ...
             ],
             "total": total_carwashes (numarul total de carwash-uri care corespund query-ului)
-        }
+        } -->
 
-    -> POST: /admin/carwash - request body: {
+    <!-- -> POST: /admin/carwash - request body: {
         "name": carwash.name,
         "address": carwash.address,
         "latitude": carwash.latitude,
         "longitude": carwash.longitude,
         "openTime": carwash.openTime,
         "contact": carwash.contact,
-    } -> return (JSON): {}
+    } -> return (JSON): {} -->
 
-    -> PATCH: /admin/carwash - request body: {
+    <!-- -> PATCH: /admin/carwash - request body: {
         "ID": carwash.id,
         "name": carwash.name,
         "address": carwash.address,
@@ -51,7 +51,7 @@
         "contact": carwash.contact,
     } (
         tinand cont ca metoda este un patch trebuie sa te astepti sa nu primesti toate campurile, ci doar campurile care se modifica, multe for fi nule sau empty string, cert e ca ID-ul carwash-ului va fi mereu primit
-    ) -> return (JSON): {}
+    ) -> return (JSON): {} -->
 
     -> DELETE: /admin/carwash - request body: {
         "ID": carwash.id
