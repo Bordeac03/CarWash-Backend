@@ -1,0 +1,242 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--accent);
+  background-color: var(--lightest);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+}
+
+.main {
+  height: 100vh;
+  /* Adjust as needed */
+  width: 100%;
+  /* Adjust as needed */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ================= LOGIN SYLING ===================== */
+
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 1rem;
+}
+
+.login-wrapper h1 {
+  font-size: 3rem;
+  color: var(--normal);
+}
+
+.login-wrapper label {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--normal);
+}
+
+.login-wrapper input {
+  width: 20rem;
+  padding: 1rem;
+  background-color: var(--lightest);
+  color: var(--normal);
+  font-size: 1.2rem;
+  border-radius: 0.7rem;
+  border: 0.1rem solid #ccc;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, .4);
+}
+
+.login-wrapper button {
+  width: 21rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  color: var(--normal);
+  font-weight: 400;
+  font-size: 1.5rem;
+  background-color: var(--lightest);
+  cursor: pointer;
+  border: .12rem solid var(--normal);
+}
+
+.login-wrapper button:hover {
+  background-color: var(--normal);
+  color: var(--lightest);
+}
+
+.login-wrapper p {
+  color: red;
+  font-size: 1.2rem;
+}
+
+/* ================= END OF LOGINM STYLING ===================== */
+
+
+
+
+
+/* ================= HOME STYLING ===================== */
+
+.dashboard-admin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+}
+
+.carwash-list {
+  gap: 1rem;
+  width: 70%;
+  border: 1.3px solid var(--normal);
+  border-radius: .5rem;
+  background-color: var(--lighter);
+  border-collapse: separate;
+  /* Add this */
+}
+
+.carwash-list tbody td {
+  box-sizing: border-box;
+  border-right: .1rem solid var(--normal);
+  text-align: center;
+  width: 25%;
+  list-style-type: none;
+  padding: .3rem;
+  cursor: pointer;
+}
+
+.carwash-list tbody td:last-child {
+  border-right: none;
+}
+
+.carwash-list tbody tr {
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+}
+
+.carwash-list>tbody>tr>td>button {
+  font-size: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+  color: var(--normal);
+  background-color: transparent;
+  font-weight: 200;
+  cursor: pointer;
+  transition: flex 0.2s ease-in-out;
+  width: 100%;
+}
+
+.carwash-modal {
+  display: flex;
+  justify-content: space-between;
+  color: var(--lightest);
+  font-weight: bolder;
+  margin-top: 1vh;
+  font-size: 1.2em;
+}
+
+.carwash-modal div {
+  display: flex;
+  flex-direction: column;
+  width: calc(50% - 1rem);
+}
+
+.carwash-modal button {
+  background-color: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1vh;
+  width: fit-content;
+  color: var(--normal);
+  font-weight: normal;
+  margin-top: .3vh;
+  cursor: pointer;
+  gap: .5rem;
+  user-select: none;
+}
+
+.modal-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 16px;
+}
+
+.user-div {
+  margin-top: 100vh;
+  position: fixed;
+}
+
+.user-div>button {
+  background-color: transparent;
+  border: 1px solid var(--normal);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  padding: 1vh;
+  width: 20vw;
+  color: var(--normal);
+  font-weight: bold;
+  margin-top: .3vh;
+  cursor: pointer;
+  gap: .5rem;
+  user-select: none;
+}
+
+/* ================= END OF HOME STYLING ===================== */
+
+
+
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --lightest: white;
+    --lighter: lightgray;
+    --light: #708090;
+    /* This is a greyer version of #264E86 */
+    --normal: #264E86;
+    --dark: black;
+    --darker: #00667A;
+    --darkest: #004C5C;
+    --accent: black;
+    --accent2: white;
+    --lightGray: #7A8C8D;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lightest: white;
+    --lighter: lightgray;
+    --light: #708090;
+    /* This is a greyer version of #264E86 */
+    --normal: #264E86;
+    --dark: black;
+    --darker: #00667A;
+    --darkest: #004C5C;
+    --accent: black;
+    --accent2: white;
+    --lightGray: #7A8C8D;
+  }
+}
