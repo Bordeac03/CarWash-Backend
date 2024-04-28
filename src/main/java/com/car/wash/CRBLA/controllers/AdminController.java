@@ -55,7 +55,7 @@ public class AdminController {
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
-
+ // (entity.get("carWashID") != null) ? Long.parseLong(entity.get("carWashID")) : null
     @PatchMapping("/carwash")
     @ResponseBody
     public ResponseEntity<String> updateCarWash(@RequestBody Map<String, String> entity) {
@@ -63,8 +63,12 @@ public class AdminController {
         newCarWash.setId(Long.parseLong(entity.get("id")));
         newCarWash.setName(entity.get("name"));
         newCarWash.setAddress(entity.get("address"));
-        newCarWash.setLatitude(Double.parseDouble(entity.get("latitude")));
-        newCarWash.setLongitude(Double.parseDouble(entity.get("longitude")));
+        if(entity.get("latitude") != null) {
+            newCarWash.setLatitude(Double.parseDouble(entity.get("latitude")));
+        }
+        if(entity.get("longitude") != null) {
+            newCarWash.setLongitude(Double.parseDouble(entity.get("longitude")));
+        }
         newCarWash.setActive(Boolean.parseBoolean(entity.get("active")));
         newCarWash.setOpenTime(entity.get("openTime"));
         newCarWash.setContact(entity.get("contact"));
@@ -123,7 +127,7 @@ public class AdminController {
         newProduct.setId(Long.parseLong(entity.get("id")));
         newProduct.setName(entity.get("name"));
         newProduct.setCarWashID((entity.get("carWashID") != null) ? Long.parseLong(entity.get("carWashID")) : null);
-        newProduct.setPrice(Double.parseDouble(entity.get("price")));
+        newProduct.setPrice(entity.get("price") == null ? null : Double.parseDouble(entity.get("price")));
         newProduct.setActive(Boolean.parseBoolean(entity.get("active")));
         return new ResponseEntity<>(adminService.updateService(newProduct).toString(), HttpStatus.OK);
     }
@@ -136,6 +140,13 @@ public class AdminController {
         adminService.deleteService(newProduct);
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
+
+    @GetMapping("/carwash/users")
+    @ResponseBody
+    public ResponseEntity<String> searchUsers(@RequestParam String searchString, @RequestParam int pageNumber, @RequestParam int limit, @RequestParam Long carWashID) {
+        return new ResponseEntity<>(adminService.searchUsers(searchString, pageNumber, limit, carWashID), HttpStatus.OK);
+    }
+    
 
     @PostMapping("/addUser")
     @ResponseBody

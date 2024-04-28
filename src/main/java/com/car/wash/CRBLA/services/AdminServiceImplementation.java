@@ -185,7 +185,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             sql.append("longitude = ?, ");
             parameters.add(carWash.getLongitude());
         }
-        if (carWash.isActive() != false) {
+        if (carWash.isActive() != false || carWash.isActive() != true){
             sql.append("active = ?, ");
             parameters.add(carWash.isActive());
         }
@@ -481,5 +481,79 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             e.printStackTrace();
         }
         return product;
+    }
+
+    @Override
+    public String searchUsers(String searchString, int pageNumber, int limit, Long carWashID) {
+        ArrayList<User> userList = new ArrayList<User>();
+        int total = 0;
+        String sql = "SELECT user.* FROM user " +
+             "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
+             "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ? " +
+             "LIMIT ?,?;";
+
+        String countSql = "SELECT COUNT(*) FROM user " +
+                        "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
+                        "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ?;";
+        
+        try (
+            PreparedStatement searchUsers = connection.prepareStatement(sql);
+            PreparedStatement getCount = connection.prepareStatement(countSql);
+        ) {
+            searchUsers.setString(1, "%" + searchString + "%");
+            searchUsers.setString(2, "%" + searchString + "%");
+
+            if(!carWashExists(carWashID)) {
+                throw new IllegalArgumentException("CarWash with given ID does not exist!");
+            } else {
+                searchUsers.setLong(3, carWashID);
+            }
+
+            searchUsers.setInt(4, (pageNumber - 1) * limit);
+            searchUsers.setInt(5, limit);
+            ResultSet rs = searchUsers.executeQuery();
+
+            getCount.setString(1, "%" + searchString + "%");
+            getCount.setString(2, "%" + searchString + "%");
+
+            if(!carWashExists(carWashID)) {
+                throw new IllegalArgumentException("CarWash with given ID does not exist!");
+            } else {
+                getCount.setLong(3, carWashID);
+            }
+
+            ResultSet countRs = getCount.executeQuery();
+
+            if(countRs.next()) {
+                total = countRs.getInt(1);
+            }
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getLong("id"));
+                user.setFullName(rs.getString("fullName"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setActive(rs.getBoolean("active"));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", userList);
+        response.put("total", total);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        return json;
     }
 }

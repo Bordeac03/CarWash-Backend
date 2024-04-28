@@ -44,19 +44,16 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
 ### SEARCH CARWASH
 GET http://localhost:8080/admin/carwash?searchString=&pageNumber=1&limit=10 HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQzMDI0OTMsImV4cCI6MTcxNDMwNjA5M30.zif-PulBxBLPJMCLnvw4rY6vHPhNJhYejE-t9a0OWj4
 
 ### UPDATE CARWASH
 PATCH http://localhost:8080/admin/carwash HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQzMDI0OTMsImV4cCI6MTcxNDMwNjA5M30.zif-PulBxBLPJMCLnvw4rY6vHPhNJhYejE-t9a0OWj4
 
 {
-    "id": 1,
-    "name": "patched_2",
-    "address": "Address",
-    "latitude": 321.123,
-    "longitude": 321.123
+    "id": 4,
+    "active": false
 }
 
 ### DELETE CARWASH
@@ -118,3 +115,8 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
 {
     "id": 2
 }
+
+### GET USERS
+GET http://localhost:8080/admin/carwash/users?searchString=&pageNumber=1&limit=10&carWashID=4 HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQzMDI0OTMsImV4cCI6MTcxNDMwNjA5M30.zif-PulBxBLPJMCLnvw4rY6vHPhNJhYejE-t9a0OWj4

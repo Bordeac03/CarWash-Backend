@@ -17,4 +17,5 @@ public interface AdminService {
     public Product addService(Product product);
     public Product updateService(Product product);
     public Product deleteService(Product product);
+    public String searchUsers(String searchString, int pageNumber, int limit, Long carWashID);
 }
