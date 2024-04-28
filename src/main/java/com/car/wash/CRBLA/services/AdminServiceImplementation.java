@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.car.wash.CRBLA.db.CoreJDBCDao;
 import com.car.wash.CRBLA.domain.CarWash;
+import com.car.wash.CRBLA.domain.Order;
 import com.car.wash.CRBLA.domain.Product;
 import com.car.wash.CRBLA.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -138,8 +139,23 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         return json;
     }
 
-    public boolean idExists(Long ID) {
+    public boolean carWashExists(Long ID) {
         String sql = "SELECT 1 FROM carWash WHERE id = ?;";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setLong(1, ID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean orderExists(Long ID) {
+        String sql = "SELECT 1 FROM bookings WHERE id = ?;";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, ID);
@@ -188,7 +204,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
         sql.deleteCharAt(sql.length() - 2);
         sql.append(" WHERE id = ?;");
-        if(!idExists(carWash.getId())) {
+        if(!carWashExists(carWash.getId())) {
             throw new IllegalArgumentException("CarWash with given ID does not exist!");
         } else {
             parameters.add(carWash.getId());
@@ -203,9 +219,130 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             updateCarWash.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-    }  
-    return carWash;
+        }  
+        return carWash;
 
-}
+    }
+
+    public CarWash deleteCarWash(CarWash carWash) {
+        String deleteServiceSql = "DELETE FROM carWashService WHERE carWashId = ?;";
+        String deleteCarWashSql = "DELETE FROM carWash WHERE id = ?;";
+
+        try (
+            PreparedStatement deleteServicesStmt = connection.prepareStatement(deleteServiceSql);
+            PreparedStatement deleteCarWashStmt = connection.prepareStatement(deleteCarWashSql);
+        ) {
+            if(!carWashExists(carWash.getId())) {
+                throw new IllegalArgumentException("CarWash with given ID does not exist!");
+            } else {
+                deleteServicesStmt.setLong(1, carWash.getId());
+                deleteServicesStmt.executeUpdate();
+
+                deleteCarWashStmt.setLong(1, carWash.getId());
+                deleteCarWashStmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return carWash;
+    }
+
+    @Override
+    public String searchOrders(String searchString, int pageNumber, int limit, String orderBy, Long carWashID) {
+        ArrayList<Order> orderList = new ArrayList<Order>();
+        int total = 0;
+        String sql = "SELECT bookings.*, users.username FROM bookings " +
+                    "LEFT JOIN users ON bookings.userID = users.id " +
+                    "WHERE (bookings.booking_name LIKE ? OR users.username LIKE ?) " +
+                    "AND bookings.carWashID = ? " +
+                    "ORDER BY " + orderBy + " " +
+                    "LIMIT ? OFFSET ?";
+        String countSql = "SELECT COUNT(*) FROM bookings WHERE booking_name LIKE ? OR userID IN (SELECT id FROM users WHERE username LIKE ?);";
+
+        try (
+            PreparedStatement searchBookings = connection.prepareStatement(sql);
+            PreparedStatement getCount = connection.prepareStatement(countSql);
+        ) {
+            if(!carWashExists(carWashID)) {
+                throw new IllegalArgumentException("CarWash with given ID does not exist!");
+            }
+
+            searchBookings.setString(1, "%" + searchString + "%");
+            searchBookings.setString(2, "%" + searchString + "%");
+            searchBookings.setInt(3, carWashID.intValue());
+            searchBookings.setInt(3, limit);
+            searchBookings.setInt(4, (pageNumber - 1) * limit);
+            ResultSet rs = searchBookings.executeQuery();
+
+            getCount.setString(1, "%" + searchString + "%");
+            getCount.setString(2, "%" + searchString + "%");
+            ResultSet countRs = getCount.executeQuery();
+
+            if(countRs.next()) {
+                total = countRs.getInt(1);
+            }
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getLong("id"));
+                order.setUserID(rs.getLong("userID"));
+                order.setCarWashID(rs.getLong("carWashID"));
+                order.setServiceID(rs.getLong("serviceID"));
+                order.setTs(rs.getInt("ts"));
+                order.setCloseBy(rs.getBoolean("closeBy"));
+                order.setActive(rs.getBoolean("active"));
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", orderList);
+        response.put("total", total);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return json;
+    }
+
+    public boolean finishOrder(Long orderID, boolean status) {
+        String sql = "UPDATE bookings SET status = ? WHERE id = ?;";
+        try (
+            PreparedStatement finishOrder = connection.prepareStatement(sql);
+        ) {
+            finishOrder.setBoolean(1, true);
+
+            if(!orderExists(orderID)) {
+                throw new IllegalArgumentException("Order with given ID does not exist!");
+            } else {
+                finishOrder.setLong(2, orderID);
+            }
+
+            int rowsUpdated = finishOrder.executeUpdate();
+
+            if(rowsUpdated > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public String searchServices(String searchString, int pageNumber, int limit) {
+        
+
+
+        return "";
+    }
     
 }

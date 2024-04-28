@@ -53,11 +53,12 @@
         tinand cont ca metoda este un patch trebuie sa te astepti sa nu primesti toate campurile, ci doar campurile care se modifica, multe for fi nule sau empty string, cert e ca ID-ul carwash-ului va fi mereu primit
     ) -> return (JSON): {} -->
 
-    -> DELETE: /admin/carwash - request body: {
+    <!-- -> DELETE: /admin/carwash - request body: {
         "ID": carwash.id
-    } (make sure to delete its services from the database) -> return (JSON): {}
+    } (make sure to delete its services from the database) -> return (JSON): {} -->
 
-    -> GET: /admin/carwash/orders - query params: search=?, page=?, limit=?, orderBy=?, carWashID=? (
+    NEEDS TESTING
+    <!-- -> GET: /admin/carwash/orders - query params: search=?, page=?, limit=?, orderBy=?, carWashID=? (
        -> search: Vei primi un string cu numele serviciului sau username si vei cauta toate comenzile care contin acel string in nume sau apartin acelui user, daca nu primesti nimic, vei returna toate comenzile in limita paginarii
        -> page: la fel ca la carwash-uri
        -> limit: la fel ca la carwash-uri
@@ -76,11 +77,11 @@
             ],
             "total": total_orders (numarul total de comenzi care corespund query-ului)
         }
-    
-    -> PATCH: /admin/carwash/orders - request body: {
+     -->
+    <!-- -> PATCH: /admin/carwash/orders - request body: {
         "ID": order.id,
         "status": order.status
-    } -> return (JSON): {}
+    } -> return (JSON): {} -->
 
     -> GET: /admin/carwash/services - query params: search=?, page=?, limit=? (
         -> search: Vei primi un string cu numele serviciului si vei cauta toate serviciile care contin acel string in nume, daca nu primesti nimic, vei returna toate serviciile in limita paginarii

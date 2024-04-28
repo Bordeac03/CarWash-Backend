@@ -25,7 +25,7 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
 GET http://localhost:8080/client/carwash HTTP/1.1
 Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzEyODcyOTIzfQ.IPkNkmJofOKpIUE59SFoxVrMwFInhoh8JcDblwI3N-A
 
-###
+### CREATE CARWASH
 POST http://localhost:8080/admin/carwash HTTP/1.1
 Content-Type: application/json
 Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyMDQ5NDksImV4cCI6MTcxNDIwODU0OX0.AnHIQ2Gc7NyNIXktdGSTyzZ-cnOsA41C4hCR_wxY-5A
@@ -41,15 +41,15 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
 }
 
 
-###
+### SEARCH CARWASH
 GET http://localhost:8080/admin/carwash?searchString=&pageNumber=1&limit=10 HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyMDg2MzEsImV4cCI6MTcxNDIxMjIzMX0.DPdCfFstXGjKKKG8VxDWgYT4Fp_YJIxT8oqvaFSAF94
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
 
-###
+### UPDATE CARWASH
 PATCH http://localhost:8080/admin/carwash HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyMDg2MzEsImV4cCI6MTcxNDIxMjIzMX0.DPdCfFstXGjKKKG8VxDWgYT4Fp_YJIxT8oqvaFSAF94
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
 
 {
     "id": 1,
@@ -57,4 +57,28 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
     "address": "Address",
     "latitude": 321.123,
     "longitude": 321.123
+}
+
+### DELETE CARWASH
+DELETE http://localhost:8080/admin/carwash HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
+
+{
+    "id": 3
+}
+
+### GET SERVICES BY CARWASH
+GET http://localhost:8080/client/service?carWashID=3
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
+
+### CREATE ORDER
+POST http://localhost:8080/client/order HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
+
+{
+    "carWashID": 3,
+    "service": [1, 2]
 }

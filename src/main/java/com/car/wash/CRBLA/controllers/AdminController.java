@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,6 +70,30 @@ public class AdminController {
         newCarWash.setContact(entity.get("contact"));
 
         return new ResponseEntity<>(adminService.updateCarWash(newCarWash).toString(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/carwash")
+    @ResponseBody
+    public ResponseEntity<String> deleteCarWash(@RequestBody Map<String, String> entity) {
+        CarWash newCarWash = new CarWash();
+        newCarWash.setId(Long.parseLong(entity.get("id")));
+        adminService.deleteCarWash(newCarWash);
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    // TESTING NEEDED
+    @GetMapping("/carwash/orders")
+    @ResponseBody
+    public ResponseEntity<String> searchOrders(@RequestParam String searchString, @RequestParam int pageNumber, @RequestParam int limit, @RequestParam String orderBy, @RequestParam Long carWashID) {
+        return new ResponseEntity<>(adminService.searchOrders(searchString, pageNumber, limit, orderBy, carWashID), HttpStatus.OK);
+    }
+
+    // TESTING NEEDED
+    @PatchMapping("/carwash/orders")
+    @ResponseBody
+    public ResponseEntity<String> finishOrder(@RequestBody Map<String, String> entity) {
+        adminService.finishOrder(Long.parseLong(entity.get("orderID")), Boolean.parseBoolean(entity.get("status")));
+        return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
     @PostMapping("/addProduct")
