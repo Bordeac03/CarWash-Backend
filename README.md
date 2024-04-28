@@ -78,12 +78,13 @@
             "total": total_orders (numarul total de comenzi care corespund query-ului)
         }
      -->
+     NEEDS TESTING
     <!-- -> PATCH: /admin/carwash/orders - request body: {
         "ID": order.id,
         "status": order.status
     } -> return (JSON): {} -->
 
-    -> GET: /admin/carwash/services - query params: search=?, page=?, limit=? (
+    <!-- -> GET: /admin/carwash/services - query params: search=?, page=?, limit=? (
         -> search: Vei primi un string cu numele serviciului si vei cauta toate serviciile care contin acel string in nume, daca nu primesti nimic, vei returna toate serviciile in limita paginarii
         -> page: la fel ca la carwash-uri
         -> limit: la fel ca la carwash-uri
@@ -97,26 +98,27 @@
                 }, ...
             ],
             "total": total_services (numarul total de servicii care corespund query-ului)
-        }
+        } -->
 
-    -> POST: /admin/carwash/services - request body: {
+    <!-- -> POST: /admin/carwash/services - request body: {
         "name": service.name,
         "price": service.price,
         "active": service.active,
         "carwashID": service.carwashID
-    } -> return (JSON): {}
+    } -> return (JSON): {} -->
 
-    -> PATCH: /admin/carwash/services - request body: {
+    <!-- -> PATCH: /admin/carwash/services - request body: {
         "ID": service.id,
         "name": service.name,
         "price": service.price,
         "active": service.active,
-    } -> return (JSON): {}
+    } -> return (JSON): {} -->
 
-    -> DELETE: /admin/carwash/services - request body: {
+    <!-- -> DELETE: /admin/carwash/services - request body: {
         "ID": service.id
-    } -> return (JSON): {}
+    } -> return (JSON): {} -->
 
+    
     -> GET: /admin/carwash/users - query params: search=?, page=?, limit=?, carWashID=? (
         -> search: Vei primi un string cu email-ul sau numele user-ului si vei cauta toti user-ii care contin acel string in email sau nume, daca nu primesti nimic, vei returna toti user-ii in limita paginarii
         -> page: la fel ca la carwash-uri

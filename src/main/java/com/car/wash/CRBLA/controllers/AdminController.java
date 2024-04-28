@@ -96,15 +96,44 @@ public class AdminController {
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
-    @PostMapping("/addProduct")
+    @GetMapping("/carwash/services")
     @ResponseBody
-    public ResponseEntity<String> addProduct(@RequestBody Map<String, String> entity) {
+    public ResponseEntity<String> searchServices(@RequestParam String searchString, @RequestParam Long carWashID, @RequestParam int pageNumber, @RequestParam int limit) {
+        return new ResponseEntity<>(adminService.searchServices(searchString, carWashID, pageNumber, limit), HttpStatus.OK);
+    }
+
+    @PostMapping("/carwash/services")
+    @ResponseBody
+    public ResponseEntity<String> addService(@RequestBody Map<String, String> entity) {
         Product newProduct = new Product();
         newProduct.setName(entity.get("name"));
+        newProduct.setCarWashID(Long.parseLong(entity.get("carWashID")));
         newProduct.setPrice(Double.parseDouble(entity.get("price")));
         newProduct.setActive(Boolean.parseBoolean(entity.get("active")));
-        adminService.addProduct(newProduct);
+        adminService.addService(newProduct);
 
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    @PatchMapping("/carwash/services")
+    @ResponseBody
+    public ResponseEntity<String> updateService(@RequestBody Map<String, String> entity) {
+        Product newProduct = new Product();
+
+        newProduct.setId(Long.parseLong(entity.get("id")));
+        newProduct.setName(entity.get("name"));
+        newProduct.setCarWashID((entity.get("carWashID") != null) ? Long.parseLong(entity.get("carWashID")) : null);
+        newProduct.setPrice(Double.parseDouble(entity.get("price")));
+        newProduct.setActive(Boolean.parseBoolean(entity.get("active")));
+        return new ResponseEntity<>(adminService.updateService(newProduct).toString(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/carwash/services")
+    @ResponseBody
+    public ResponseEntity<String> deleteService(@RequestBody Map<String, String> entity) {
+        Product newProduct = new Product();
+        newProduct.setId(Long.parseLong(entity.get("id")));
+        adminService.deleteService(newProduct);
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 

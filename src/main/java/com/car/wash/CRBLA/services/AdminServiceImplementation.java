@@ -46,26 +46,6 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     }
     
     @Override
-    public Product addProduct(Product product) {
-        String sql = "INSERT INTO product (name, price, description, active) VALUES (?, ?, ?, ?);";
-        try (
-            PreparedStatement addProduct = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-        ) {
-            addProduct.setString(1, product.getName());
-            addProduct.setDouble(2, product.getPrice());
-            addProduct.setBoolean(3, product.isActive());
-            addProduct.executeUpdate();
-            ResultSet rs = addProduct.getGeneratedKeys();
-            if (rs.next()){
-                product.setId(rs.getLong(1));
-            }
-        } catch (SQLException e) {
-                e.printStackTrace();
-        }
-        return product;
-    }
-    
-    @Override
     public User addUser(User user) {
         String sql = "INSERT INTO user (name, email, password, phone, active) VALUES (?, ?, ?, ?, ?);";
         try (
@@ -169,6 +149,21 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         return false;
     }
 
+    public boolean serviceExists(Long ID) {
+        String sql = "SELECT 1 FROM carWashService WHERE id = ?;";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setLong(1, ID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public CarWash updateCarWash(CarWash carWash) {
         StringBuilder sql = new StringBuilder("UPDATE carWash SET ");
@@ -224,6 +219,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
     }
 
+    @Override
     public CarWash deleteCarWash(CarWash carWash) {
         String deleteServiceSql = "DELETE FROM carWashService WHERE carWashId = ?;";
         String deleteCarWashSql = "DELETE FROM carWash WHERE id = ?;";
@@ -313,8 +309,9 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         return json;
     }
 
+    @Override
     public boolean finishOrder(Long orderID, boolean status) {
-        String sql = "UPDATE bookings SET status = ? WHERE id = ?;";
+        String sql = "UPDATE bookings SET active = ? WHERE id = ?;";
         try (
             PreparedStatement finishOrder = connection.prepareStatement(sql);
         ) {
@@ -338,11 +335,151 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     }
 
     @Override
-    public String searchServices(String searchString, int pageNumber, int limit) {
-        
+    public String searchServices(String searchString, Long carwashID, int pageNumber, int limit) {
+        ArrayList<Product> productList = new ArrayList<Product>();
+        int total = 0;
+        String sql = "SELECT * FROM carWashService WHERE name LIKE ? AND carWashID = ? LIMIT ?,?;";
+        String countSql = "SELECT COUNT(*) FROM carWashService WHERE name LIKE ?;";
 
+        try (
+            PreparedStatement searchServices = connection.prepareStatement(sql);
+            PreparedStatement getCount = connection.prepareStatement(countSql);
+        ) {
+            searchServices.setString(1, "%" + searchString + "%");
 
-        return "";
+            if(!carWashExists(carwashID)) {
+                throw new IllegalArgumentException("CarWash with given ID does not exist!");
+            } else {
+                searchServices.setLong(2, carwashID);
+            }
+
+            searchServices.setInt(3, (pageNumber - 1) * limit);
+            searchServices.setInt(4, limit);
+            ResultSet rs = searchServices.executeQuery();
+
+            getCount.setString(1, "%" + searchString + "%");
+            ResultSet countRs = getCount.executeQuery();
+
+            if(countRs.next()) {
+                total = countRs.getInt(1);
+            }
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getLong("id"));
+                product.setName(rs.getString("name"));
+                product.setPrice(rs.getDouble("price"));
+                product.setActive(rs.getBoolean("active"));
+                productList.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", productList);
+        response.put("total", total);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return json;
     }
-    
+
+    @Override
+    public Product addService(Product product) {
+        String sql = "INSERT INTO carWashService (name, carWashID, price, active) VALUES (?, ?, ?, ?);";
+        try (
+            PreparedStatement addService = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        ) {
+            addService.setString(1, product.getName());
+
+            if(!carWashExists(product.getCarWashID())) {
+                throw new IllegalArgumentException("CarWash with given ID does not exist!");
+            } else {
+                addService.setLong(2, product.getCarWashID());
+            }
+            
+            addService.setDouble(3, product.getPrice());
+            addService.setBoolean(4, product.isActive());
+            addService.executeUpdate();
+            ResultSet rs = addService.getGeneratedKeys();
+            if (rs.next()){
+                product.setId(rs.getLong(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+
+    @Override
+    public Product updateService(Product product) {
+        StringBuilder sql = new StringBuilder("UPDATE carWashService SET ");
+
+        List<Object> parameters = new ArrayList<>();
+        if (product.getName() != null) {
+            sql.append("name = ?, ");
+            parameters.add(product.getName());
+        }
+        if (product.getCarWashID() != null) {
+            if(!carWashExists(product.getCarWashID())) {
+                throw new IllegalArgumentException("CarWash with given ID does not exist!");
+            } else {
+                sql.append("carWashID = ?, ");
+                parameters.add(product.getCarWashID());
+            }
+        }
+        if (product.getPrice() != 0) {
+            sql.append("price = ?, ");
+            parameters.add(product.getPrice());
+        }
+        if (product.isActive() != false || product.isActive() != true){
+            sql.append("active = ?, ");
+            parameters.add(product.isActive());
+        }
+        sql.deleteCharAt(sql.length() - 2);
+        sql.append(" WHERE id = ?;");
+        if(!serviceExists(product.getId())) {
+            throw new IllegalArgumentException("Service with given ID does not exist!");
+        } else {
+            parameters.add(product.getId());
+        }
+
+        try (
+            PreparedStatement updateService = connection.prepareStatement(sql.toString());
+        ) {
+            for (int i = 0; i < parameters.size(); i++) {
+                updateService.setObject(i + 1, parameters.get(i));
+            }
+            updateService.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return product;
+    }
+
+    @Override
+    public Product deleteService(Product product) {
+        String sql = "DELETE FROM carWashService WHERE id = ?;";
+        try (
+            PreparedStatement deleteService = connection.prepareStatement(sql);
+        ) {
+            if(!serviceExists(product.getId())) {
+                throw new IllegalArgumentException("Service with given ID does not exist!");
+            } else {
+                deleteService.setLong(1, product.getId());
+            }
+            deleteService.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
 }

@@ -44,12 +44,12 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
 ### SEARCH CARWASH
 GET http://localhost:8080/admin/carwash?searchString=&pageNumber=1&limit=10 HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
 
 ### UPDATE CARWASH
 PATCH http://localhost:8080/admin/carwash HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
 
 {
     "id": 1,
@@ -62,8 +62,7 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
 ### DELETE CARWASH
 DELETE http://localhost:8080/admin/carwash HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
-
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
 {
     "id": 3
 }
@@ -71,14 +70,51 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciI
 ### GET SERVICES BY CARWASH
 GET http://localhost:8080/client/service?carWashID=3
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
 
 ### CREATE ORDER
 POST http://localhost:8080/client/order HTTP/1.1
 Content-Type: application/json
-Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTAxNjAsImV4cCI6MTcxNDI5Mzc2MH0.Q6j2XZwMYQbL2DYHX6nfnr3Mu1D_KnKqMo4eCdH-mHo
-
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
 {
     "carWashID": 3,
     "service": [1, 2]
+}
+
+### GET SERVICES BY CARWASH AND STRING
+GET http://localhost:8080/admin/carwash/services?searchString=&carWashID=4&pageNumber=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
+
+### CREATE SERVICE
+POST http://localhost:8080/admin/carwash/services HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
+
+{
+    "carWashID": 4,
+    "name": "Service 2",
+    "price": 100,
+    "active": true
+}
+
+### UPDATE SERVICE
+PATCH http://localhost:8080/admin/carwash/services HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
+
+{
+    "id": 2,
+    "name": "Service 1 modified",
+    "price": 100,
+    "active": true
+}
+
+### DELETE SERVICE
+DELETE http://localhost:8080/admin/carwash/services HTTP/1.1
+Content-Type: application/json
+Cookie: accessToken=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDYXJXYXNoIiwic3ViIjoidXNlciIsImlkIjoxLCJpYXQiOjE3MTQyOTg4NjQsImV4cCI6MTcxNDMwMjQ2NH0.fL1jAQSCuq_j9644Gj03fuLpTUdrqYFL3P6OXoDxfPw
+    
+{
+    "id": 2
 }
