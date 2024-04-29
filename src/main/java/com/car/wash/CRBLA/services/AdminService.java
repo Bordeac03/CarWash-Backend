@@ -9,7 +9,6 @@ public interface AdminService {
     public String getCarwash(String searchString, int pageNumber, int limit);
     public CarWash updateCarWash(CarWash carWash);
     public CarWash addCarWash(CarWash carWash);
-    public User addUser(User user);
     public CarWash deleteCarWash(CarWash carWash);
     public String searchOrders(String searchString, int pageNumber, int limit, String orderBy, Long carWashID);
     public boolean finishOrder(Long orderID, boolean status);
@@ -18,4 +17,5 @@ public interface AdminService {
     public Product updateService(Product product);
     public Product deleteService(Product product);
     public String searchUsers(String searchString, int pageNumber, int limit, Long carWashID);
+    public User addUser(User user, Long carWashID);
 }

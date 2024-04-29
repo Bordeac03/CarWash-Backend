@@ -147,20 +147,16 @@ public class AdminController {
         return new ResponseEntity<>(adminService.searchUsers(searchString, pageNumber, limit, carWashID), HttpStatus.OK);
     }
     
-
-    @PostMapping("/addUser")
+    @PostMapping("/carwash/users")
     @ResponseBody
     public ResponseEntity<String> addUser(@RequestBody Map<String, String> entity) {
         User newUser = new User();
-
         newUser.setFullName(entity.get("fullName"));
         newUser.setEmail(entity.get("email"));
         newUser.setPassword(entity.get("password"));
         newUser.setRole(entity.get("role"));
         newUser.setActive(Boolean.parseBoolean(entity.get("active")));
-
-        adminService.addUser(newUser);
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+        return new ResponseEntity<>(adminService.addUser(newUser, Long.parseLong(entity.get("carWashID"))).toString(), HttpStatus.OK);
     }
     
     

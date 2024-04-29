@@ -119,7 +119,7 @@
     } -> return (JSON): {} -->
 
     
-    -> GET: /admin/carwash/users - query params: search=?, page=?, limit=?, carWashID=? (
+    <!-- -> GET: /admin/carwash/users - query params: search=?, page=?, limit=?, carWashID=? (
         -> search: Vei primi un string cu email-ul sau numele user-ului si vei cauta toti user-ii care contin acel string in email sau nume, daca nu primesti nimic, vei returna toti user-ii in limita paginarii
         -> page: la fel ca la carwash-uri
         -> limit: la fel ca la carwash-uri
@@ -136,16 +136,15 @@
                 }, ...
             ],
             "total": total_users (numarul total de useri care corespund query-ului)
-        }
+        } -->
 
-    -> POST: /admin/carwash/users - request body: {
+    <!-- -> POST: /admin/carwash/users - request body: {
         "email": user.email,
         "password": user.password,
         "fullname": user.fullname,
-        "phone": user.phone,
         "role": user.role,
         "active": user.active,
         "carwashID": user.carwashID
     } (
         Adaugi utilizator cu rol specific si il legi de carwash-ul specific in tabela carWashConfig
-    ) -> return (JSON): {}
+    ) -> return (JSON): {} -->

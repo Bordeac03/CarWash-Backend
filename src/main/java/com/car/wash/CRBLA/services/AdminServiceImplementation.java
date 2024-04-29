@@ -44,27 +44,6 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
         return carWash;
     }
-    
-    @Override
-    public User addUser(User user) {
-        String sql = "INSERT INTO user (name, email, password, phone, active) VALUES (?, ?, ?, ?, ?);";
-        try (
-            PreparedStatement addUser = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-        ) {
-            addUser.setString(1, user.getFullName());
-            addUser.setString(2, user.getEmail());
-            addUser.setString(3, user.getPassword());
-            addUser.setBoolean(4, user.getActive());
-            addUser.executeUpdate();
-            ResultSet rs = addUser.getGeneratedKeys();
-            if (rs.next()){
-                user.setId(rs.getLong(1));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
 
     @Override
     public String getCarwash(String searchString, int pageNumber, int limit) {
@@ -555,5 +534,44 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
     
         return json;
+    }
+
+    @Override
+    public User addUser(User user, Long carWashID) {
+        String sql = "INSERT INTO user (email, password, fullName, active, role) VALUES (?, ?, ?, ?, ?);";
+        String carWashConfigSql = "INSERT INTO carWashConfig (userID, carWashID) VALUES (?, ?);";
+        try (
+            PreparedStatement addUser = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement addCarWashConfig = connection.prepareStatement(carWashConfigSql);
+        ) {
+            addUser.setString(1, user.getEmail());
+            addUser.setString(2, user.getPassword());
+            addUser.setString(3, user.getFullName());
+            addUser.setBoolean(4, user.getActive());
+            System.out.println(user.getRole() + "IM HERE");
+            if(!(user.getRole()).equals("carwash")) {
+                throw new IllegalArgumentException("User role must be carwash!");
+            } else {
+                addUser.setString(5, user.getRole());
+            }
+
+            addUser.executeUpdate();
+            ResultSet rs = addUser.getGeneratedKeys();
+            if (rs.next()){
+                user.setId(rs.getLong(1));
+                addCarWashConfig.setLong(1, user.getId());
+
+                if(!carWashExists(carWashID)) {
+                    throw new IllegalArgumentException("CarWash with given ID does not exist!");
+                } else {
+                    addCarWashConfig.setLong(2, carWashID);
+                }
+
+                addCarWashConfig.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }
