@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RiCarWashingFill } from "react-icons/ri";
-import { ToggleSlider }  from "react-toggle-slider";
+// import { ToggleSlider }  from "react-toggle-slider";
 import { IoMdAdd } from "react-icons/io";
 import { adminInstance } from "../util/instances";
 
@@ -12,6 +12,7 @@ const Home = () => {
     const [ID4, setID4] = useState(null);
 
     const [carWashes, setCarWashes] = useState([]);
+    const [selectedCarwash, setSelectedCarwash] = useState(null);
     const [totalCarWashes, setTotalCarWashes] = useState(0);
 
     /*
@@ -32,10 +33,21 @@ const Home = () => {
                 page/limit/search: value
               };
             });
+
         => calculeaza cate pagini sunt in total si afiseaza butoanele de next si back in functie de numarul de pagini
         => pentru a schimba statusul unui carwash foloseste functia handleCarwashStatusChange, care primeste ca parametru noul status si id-ul carwash-ului, functia va face un request catre server pentru a schimba statusul carwash-ului si altul pewntru a da rfresh listei de carwashes, recomand sa faci un map pe array-ul de carwash pentru a afisa fiecare carwash in parte si a acesa datele sale, jap jap
         => pentru a adauga un carwash vom construi un obiect JSON cu urmatorii parametri,  eu iti  las o chestie ca la search, ramane la decizia ta daca o folosesti sau nu
     */
+
+   const [uploadNewCarWash, setUploadNewCarWash] = useState({
+       name: "",
+       address: "",
+       latitude: 0.0,
+       longitude: 0.0,
+       active: false,
+       openTime: "",
+       contact: ""
+   });
 
     const [searchParams, setSearchParams] = useState({
         page: 1,
@@ -43,15 +55,6 @@ const Home = () => {
         search: ''
     });
 
-    const [uploadNewCarWash, setUploadNewCarWash] = useState({
-        name: "",
-        address: "",
-        latitude: 0.0,
-        longitude: 0.0,
-        active: false,
-        openTime: "",
-        contact: ""
-    });
 
     const handleChangeSearchParams = (event) => {
         if (searchParams[event.target.name] && searchParams[event.target.name] == event.target.value) {
@@ -64,6 +67,16 @@ const Home = () => {
           };
         });
     };
+
+    const initialCarWashState = {
+        name: "",
+        address: "",
+        latitude: 0.0,
+        longitude: 0.0,
+        active: false,
+        openTime: "",
+        contact: ""
+      };
 
     // pentru <input/> foloseste urmatoarea functie
     const handleUploadNewCarWash = (event) => {
@@ -85,9 +98,19 @@ const Home = () => {
           limit: searchParams.limit
         }})
         .then((res) => {
+           console.log(res.data);
           if (!res.data) {
             return;
           }
+          const carWashes = res.data.data.map(carWashes => ({
+            id: carWashes.ID,
+            name: carWashes.name,
+            address: carWashes.address,
+            active: carWashes.active,
+            openTime: carWashes.openTime,
+            contact: carWashes.contact
+          }));
+
           setCarWashes(res.data.data);
           setTotalCarWashes(res.data.total);
         })
@@ -122,6 +145,8 @@ const Home = () => {
             update();
         })
         .catch((err) => console.log(err));
+
+        setUploadNewCarWash(initialCarWashState);
     };
 
 // ======================================================================================================
@@ -131,14 +156,14 @@ const Home = () => {
         setStatus(newStatus);
     };
 
-    const ToggleSliderWithStatus = () => {
-        const handleChange = (event) => {
-            const newStatus = event.target.checked ? 'Active' : 'Inactive';
-            handleStatusChange(newStatus);
-        };
+    // const ToggleSliderWithStatus = () => {
+    //     const handleChange = (event) => {
+    //         const newStatus = event.target.checked ? 'Active' : 'Inactive';
+    //         handleStatusChange(newStatus);
+    //     };
 
-        return <ToggleSlider onChange={handleChange} />;
-    };
+    //     return <ToggleSlider onChange={handleChange} />;
+    // };
 
     // useEffect calls
     useEffect(() => {
@@ -151,31 +176,12 @@ const Home = () => {
                 <div className='shadow' style={{position: "absolute", backgroundColor: "var(--lightest)", transition: ".5s ease", width: ID !== null ? "min(800px, 80%)" : 0, display: "flex", left: "50%", top: "30%", transform: "translate(-50%,-50%)", overflow: "hidden", opacity: ID !== null ? 1 : 0, flexDirection: "column", borderRadius: "10px", padding: "2em", fontSize: "1.2em", gap:".2em", border:'2px solid var(--normal)', boxSizing:'border-box', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.4)', zIndex:'3000'}}>
                     <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1em"}}>
                         <span></span>
-                        <span style={{fontSize: "1.5em", fontWeight: "900", color:"var(--normal)"}}>Carwash Settings</span>
+                        <span style={{fontSize: "1.5em", fontWeight: "900", color:"var(--normal)"}}>Order History for {selectedCarwash.name}</span>
                         <span className='hover' style={{cursor: "pointer", borderRadius: "12px", fontWeight: "600", color:"#000000"}} onClick={() => {setID(null)}}>X</span>
                     </div>
                     <div className='carwash-modal'>
                         <div>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Add User</span>
-                            </button>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Update Users</span>
-                            </button>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Add Products</span>
-                            </button>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Update Products</span>
-                            </button>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Order History</span>
-                            </button>
+
                         </div>
                     </div>
                 </div> )} 
@@ -188,24 +194,41 @@ const Home = () => {
                         <span className='hover' style={{cursor: "pointer", borderRadius: "12px", fontWeight: "600", color:"#000000"}} onClick={() => {setID2(null)}}>X</span>
                     </div>
                     <div className='carwash-modal'>
-                        <div>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Add User</span>
-                            </button>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Add Products</span>
-                            </button>
-                            <button className='modal-button'>
-                                <IoMdAdd size="2rem" />
-                                <span style={{fontSize:'1.6rem'}}>Order History</span>
-                            </button>
-                        </div>
+                           <div>
+                               <span style = {{color:'var(--normal)'}}>Name</span>
+                           <input style={{backgroundColor: "transparent", color: "var(--accent)", border: "1px solid var(--accent)", padding: ".5em", borderRadius: "10px", marginBottom: "1em"}}
+                                type="text" 
+                                value={uploadNewCarWash.name} 
+                                onChange={(e) => setUploadNewCarWash(prev => ({...prev, name: e.target.value}))}
+                                />
+                                <span style = {{color:'var(--normal)'}}>Address</span>
+                            <input style={{backgroundColor: "transparent", color: "var(--accent)", border: "1px solid var(--accent)", padding: ".5em", borderRadius: "10px", marginBottom: "1em"}}
+                                type="text" 
+                                value={uploadNewCarWash.address} 
+                                onChange={(e) => setUploadNewCarWash(prev => ({...prev, address: e.target.value}))}
+                                />
+                                <span style = {{color:'var(--normal)'}}>OpenTime</span>
+                            <input style={{backgroundColor: "transparent", color: "var(--accent)", border: "1px solid var(--accent)", padding: ".5em", borderRadius: "10px", marginBottom: "1em"}} 
+                                type="text" 
+                                value={uploadNewCarWash.openTime} 
+                                onChange={(e) => setUploadNewCarWash(prev => ({...prev, openTime: e.target.value}))}
+                                />
+                                <span style = {{color:'var(--normal)'}}>Contact</span>
+                            <input style={{backgroundColor: "transparent", color: "var(--accent)", border: "1px solid var(--accent)", padding: ".5em", borderRadius: "10px", marginBottom: "1em"}}
+                                type="text" 
+                                value={uploadNewCarWash.contact} 
+                                onChange={(e) => setUploadNewCarWash(prev => ({...prev, contact: e.target.value}))}
+                                />
+
+                                <button className='modal-button' onClick={handleAddCarWash}>
+                                    <IoMdAdd size="2rem" />
+                                    <span style={{fontSize:'1.6rem'}}>Add Carwash</span>
+                                </button>
+                           </div>
                     </div>
                 </div> )} 
 
-                {ID3 !== null && (
+                {/* {ID3 !== null && (
                 <div className='shadow' style={{position: "absolute", backgroundColor: "var(--lightest)", transition: ".5s ease", width: ID3 !== null ? "min(800px, 80%)" : 0, display: "flex", left: "50%", top: "55%", transform: "translate(-50%,-50%)", overflow: "hidden", opacity: ID3 !== null ? 1 : 0, flexDirection: "column", borderRadius: "10px", padding: "2em", fontSize: "1.2em", gap:".2em", border:'2px solid var(--normal)', boxSizing:'border-box', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.4)', zIndex:'3000'}}>
                     <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1em"}}>
                         <span></span>
@@ -253,7 +276,7 @@ const Home = () => {
                             </button>
                         </div>
                     </div>
-                </div> )} 
+                </div> )}  */}
 
             <div className="dashboard-admin">
                 <h1>Admin Dashboard</h1>
@@ -265,41 +288,33 @@ const Home = () => {
                             <td>Address</td>
                             <td>Status</td>
                         </tr>
-                        <tr>
-                            <td onClick={() => setID(1)}><button style={{fontSize:'3rem'}}><RiCarWashingFill /></button></td>
-                            <td onClick={() => setID(1)}>Car Wash 1</td>
-                            <td onClick={() => setID(1)}>1234 Main St</td>
-                            <td><div><ToggleSliderWithStatus/> #RESPONSIVE SLIDER</div></td>
-                        </tr>
-                        <tr onClick={() => setID(1)}>
+                        {carWashes.map((e,i) => 
+                        <tr onClick={() => {setID(i), setSelectedCarwash(e)}}>
                             <td><button style={{fontSize:'3rem'}}><RiCarWashingFill /></button></td>
-                            <td>Car Wash 1</td>
-                            <td>1234 Main St</td>
-                            <td><div><ToggleSliderWithStatus/> #RESPONSIVE SLIDER</div></td>
+                            <td>{e.name}</td>
+                            <td>{e.address}</td>
+                            <td onClick={(event) => event.stopPropagation()}><div>{e.status}</div></td>
                         </tr>
-                        <tr onClick={() => setID(1)}>
-                            <td><button style={{fontSize:'3rem'}}><RiCarWashingFill /></button></td>
-                            <td>Car Wash 1</td>
-                            <td>1234 Main St</td>
-                            <td><div><ToggleSliderWithStatus/> #RESPONSIVE SLIDER</div></td>
-                        </tr>
-                        <tr onClick={() => setID(1)}>
-                            <td><button style={{fontSize:'3rem'}}><RiCarWashingFill /></button></td>
-                            <td>Car Wash 1</td>
-                            <td>1234 Main St</td>
-                            <td><div><ToggleSliderWithStatus/> #RESPONSIVE SLIDER</div></td>
-                        </tr>
-                        <tr onClick={() => setID(1)}>
-                            <td><button style={{fontSize:'3rem'}}><RiCarWashingFill /></button></td>
-                            <td>Car Wash 1</td>
-                            <td>1234 Main St</td>
-                            <td><div><ToggleSliderWithStatus/> #RESPONSIVE SLIDER</div></td>
-                        </tr>
+                        )}
                     </tbody>
                 </table>
-                <span> PAGE BACK // NEXT PAGE </span>
+
+                <div style={{display: "flex", justifyContent: "flex-end", gap: "1em", fontSize:"1.2em", padding: "1em", alignItems: "center"}}>
+                    <span style={{marginRight: "-.6em", fontWeight: "400"}}>rows per page</span>
+                    <select name="limit" style={{fontSize: ".9em", backgroundColor: "transparent", color:'var(--accent)'}} value={searchParams.limit} onChange={handleChangeSearchParams}>
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={15}>15</option>
+                    </select>
+                    <span>{searchParams.page} of {Math.round(totalCarWashes / searchParams.limit) === 0 ? 1 : Math.ceil(totalCarWashes / searchParams.limit)}</span>
+                    <span className='hover' style={{padding: ".5em", cursor: "pointer", borderRadius: "10px", marginRight: "-.8em"}} onClick={() => {if(searchParams.page <= 1)return; setSearchParams(prev => ({...prev, page: prev.page - 1}));}}>{'<'}</span>
+                    <span className='hover' style={{padding: ".5em", cursor: "pointer", borderRadius: "10px"}} onClick={() => {if(searchParams.page >= Math.ceil(totalCarWashes / searchParams.limit))return; setSearchParams(prev => ({...prev, page: prev.page + 1}));}}>{'>'}</span>
+                </div>
+
+
+
                 <div className="user-div">
-                    <button className='modal-button'>
+                    <button className='modal-button' onClick={() => setID2(1)}>
                         <IoMdAdd size="2rem" />
                         <span style={{fontSize:'1.6rem'}}>Add Carwash</span>
                     </button>
