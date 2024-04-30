@@ -3,6 +3,7 @@ import { RiCarWashingFill } from "react-icons/ri";
 // import { ToggleSlider }  from "react-toggle-slider";
 import { IoMdAdd } from "react-icons/io";
 import { adminInstance } from "../util/instances";
+import { CiCircleMinus, CiSearch } from "react-icons/ci";
 
 const Home = () => {
     const [status, setStatus] = useState('Active');
@@ -228,7 +229,7 @@ const Home = () => {
                     </div>
                 </div> )} 
 
-                {/* {ID3 !== null && (
+                {ID3 !== null && (
                 <div className='shadow' style={{position: "absolute", backgroundColor: "var(--lightest)", transition: ".5s ease", width: ID3 !== null ? "min(800px, 80%)" : 0, display: "flex", left: "50%", top: "55%", transform: "translate(-50%,-50%)", overflow: "hidden", opacity: ID3 !== null ? 1 : 0, flexDirection: "column", borderRadius: "10px", padding: "2em", fontSize: "1.2em", gap:".2em", border:'2px solid var(--normal)', boxSizing:'border-box', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.4)', zIndex:'3000'}}>
                     <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1em"}}>
                         <span></span>
@@ -276,28 +277,40 @@ const Home = () => {
                             </button>
                         </div>
                     </div>
-                </div> )}  */}
+                </div> )} 
 
             <div className="dashboard-admin">
                 <h1>Admin Dashboard</h1>
-                <table className="carwash-list">
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td>Name</td>
-                            <td>Address</td>
-                            <td>Status</td>
-                        </tr>
-                        {carWashes.map((e,i) => 
-                        <tr onClick={() => {setID(i), setSelectedCarwash(e)}}>
-                            <td><button style={{fontSize:'3rem'}}><RiCarWashingFill /></button></td>
-                            <td>{e.name}</td>
-                            <td>{e.address}</td>
-                            <td onClick={(event) => event.stopPropagation()}><div>{e.status}</div></td>
-                        </tr>
-                        )}
-                    </tbody>
-                </table>
+                
+                <div className="search-table-div">
+                    <div className='searchContainer'>
+                        <div>
+                            <input onChange={e => debouncedSearch(e.target.value)} type='text' placeholder='Search a carwash...'/>
+                            <button type='submit' onClick>
+                                <CiSearch style = {{height:'100%', fontSize:'1.5rem'}}/>
+                            </button>
+                        </div>
+                    </div>        
+
+                    <table className="carwash-list">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>Name</td>
+                                <td>Address</td>
+                                <td>Status</td>
+                            </tr>
+                            {carWashes.map((e,i) => 
+                            <tr onClick={() => {setID(i), setSelectedCarwash(e)}}>
+                                <td><button style={{fontSize:'3rem'}}><RiCarWashingFill /></button></td>
+                                <td>{e.name}</td>
+                                <td>{e.address}</td>
+                                <td onClick={(event) => event.stopPropagation()}><div>{e.status}</div></td>
+                            </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
                 <div style={{display: "flex", justifyContent: "flex-end", gap: "1em", fontSize:"1.2em", padding: "1em", alignItems: "center"}}>
                     <span style={{marginRight: "-.6em", fontWeight: "400"}}>rows per page</span>

@@ -109,7 +109,7 @@ body {
   border-radius: .5rem;
   background-color: var(--lighter);
   border-collapse: separate;
-  /* Add this */
+  margin-top: 1vh;
 }
 
 .carwash-list tbody td {
@@ -201,6 +201,78 @@ body {
   cursor: pointer;
   gap: .5rem;
   user-select: none;
+}
+
+.searchContainer {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+  top: 1.5rem;
+	background-color: var(--lightest);
+  border: solid .1rem var(--normal);
+	border-radius: 1rem;
+	padding: .25em;
+	width: min(60em, 80%);
+	cursor: pointer;
+}
+
+.searchContainer > div:first-child {
+	display: flex;
+	flex-direction: row;
+}
+
+.searchContainer > div:nth-child(2) > span:first-child {
+	border-top: .2em solid var(--lightGray);
+}
+
+.searchContainer > div > input {
+	font-size: 1.5em;
+	padding: 0.5em;
+	border: none;
+	border-radius: 2rem;
+	color: var(--dark); 
+	background-color: var(--lightest);
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+.searchContainer > div > input:focus {
+	outline: none;
+}
+
+.searchContainer > div > input::placeholder {
+	color: var(--dark); 
+}	
+
+.searchContainer > div > button {
+	font-size: 1.5em;
+	padding: 0.5em;
+	border: none;
+	border-radius: 2rem;
+	background-color: var(--lightest);
+	color: var(--dark);
+}
+
+.searchContainer > div > button:focus {
+	outline: none;
+}
+
+.searchContainer > div > button:hover {
+	cursor: pointer;
+	color: var(--dark);
+}
+
+.searchContainer > div > button:active {
+	color: var(--darker);
+}
+
+.search-table-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 2vh;
 }
 
 /* ================= END OF HOME STYLING ===================== */
