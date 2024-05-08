@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("admin")
                         .requestMatchers("/carwash/**").hasRole("carwash")
                         .requestMatchers("/client/**").hasRole("client")
-                        .anyRequest().denyAll())
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
