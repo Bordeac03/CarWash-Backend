@@ -68,13 +68,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(userService.findById(id).getRole()));
-        System.out.println(userService.findById(id).getRole());
-        System.out.println(authorities);
-        System.out.println(id);
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userService.findById(id).getRole()));
+
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 id, null, authorities);
-        System.out.println(authentication);
+                
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
