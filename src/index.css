@@ -109,7 +109,8 @@ body {
   border-radius: .5rem;
   background-color: var(--lighter);
   border-collapse: separate;
-  margin-top: 1vh;
+  margin-top: 13vh;
+  color: var(--normal);
 }
 
 .carwash-list tbody td {
@@ -275,6 +276,108 @@ body {
   margin-top: 2vh;
 }
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--lightinbetween);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--normal);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--normal);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.users-list {
+  width: 100%;
+  gap: 1rem;
+  border: 1.3px solid var(--normal);
+  border-radius: .5rem;
+  background-color: var(--lighter);
+  border-collapse: separate;
+  margin-top: 1vh;
+  color: var(--accent);
+}
+
+.users-list tbody td {
+  box-sizing: border-box;
+  border-right: .1rem solid var(--normal);
+  text-align: center;
+  width: 25%;
+  list-style-type: none;
+  padding: .3rem;
+  cursor: pointer;
+}
+
+.users-list tbody td:last-child {
+  border-right: none;
+}
+
+.users-list tbody tr {
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+}
+
+.users-list>tbody>tr>td>button {
+  font-size: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+  color: var(--normal);
+  background-color: transparent;
+  font-weight: 200;
+  cursor: pointer;
+  transition: flex 0.2s ease-in-out;
+  width: 100%;
+}
+
 /* ================= END OF HOME STYLING ===================== */
 
 
@@ -285,6 +388,7 @@ body {
   :root {
     --lightest: white;
     --lighter: lightgray;
+    --lightinbetween:#c0c4c9;
     --light: #708090;
     /* This is a greyer version of #264E86 */
     --normal: #264E86;
@@ -301,6 +405,7 @@ body {
   :root {
     --lightest: white;
     --lighter: lightgray;
+    --lightinbetween:#c0c4c9;
     --light: #708090;
     /* This is a greyer version of #264E86 */
     --normal: #264E86;

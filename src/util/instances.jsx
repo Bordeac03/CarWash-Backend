@@ -17,3 +17,11 @@ export const adminInstance = () => {
     });
     return customInstance;
 }
+
+export const clientInstance = () => {
+    const customInstance = axios.create({
+        baseURL: baseURL + "client/",
+        withCredentials: true
+    });
+    return customInstance;
+}
