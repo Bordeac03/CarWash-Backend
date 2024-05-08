@@ -183,6 +183,24 @@
                     "status": order.status,
                     "ts": order.ts,
                 }, ...
+                exemplu:
+                {
+                    ID: 1,
+                    service: {
+                        ID: 1,
+                        name: 'Service 1',
+                        price: 100,
+                        carWashID: 1,
+                    },
+                    user: {
+                        ID: 1,
+                        fullName: 'User 1',
+                        email: 'user1@gmail.com'
+                    },
+                    ts: Math.floor(Date.now() / 1000) - timestamp in secunde ca idee,
+                    closeBy: true,
+                    active: true
+                }
             ],
             "total": total_orders (numarul total de comenzi care corespund query-ului)
         }
