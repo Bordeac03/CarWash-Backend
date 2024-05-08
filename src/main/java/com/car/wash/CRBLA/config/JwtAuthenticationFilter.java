@@ -10,6 +10,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.car.wash.CRBLA.services.UserService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -31,6 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Value("${spring.application.secretkey}")
     private String secretKey;
+
+    private final UserService userService;
+    
+    public JwtAuthenticationFilter(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -60,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("USER"));
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(userService.findById(id).getRole()));
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 id, null, authorities);

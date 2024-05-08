@@ -157,4 +157,41 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
         }
         return services;
     }
+
+    @Override
+    public CarWash findCarWasheByUserId(Long userID) {
+        CarWash cw = null;
+        String sql = "SELECT * FROM carWash WHERE ID = (SELECT carWashID FROM carWashConfig WHERE userID = ? LIMIT 1) LIMIT 1;";
+        try (
+                PreparedStatement findCarWash = connection.prepareStatement(sql);) {
+            findCarWash.setLong(1, userID);
+            ResultSet rs = findCarWash.executeQuery();
+            if (rs.next()) {
+                cw = new CarWash(rs.getLong("ID"), rs.getString("name"), rs.getString("address"),
+                        rs.getDouble("latitude"), rs.getDouble("longitude"), rs.getBoolean("active"),
+                        rs.getString("openTime"), rs.getString("contact"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cw;
+    }
+
+    @Override
+    public Product findServiceById(Long id) {
+        Product s = null;
+        String sql = "SELECT * FROM carWashService WHERE ID = ? LIMIT 1;";
+        try (
+                PreparedStatement findService = connection.prepareStatement(sql);) {
+            findService.setLong(1, id);
+            ResultSet rs = findService.executeQuery();
+            if (rs.next()) {
+                s = new Product(rs.getLong("ID"), rs.getString("name"), rs.getLong("carWashID"),
+                        rs.getDouble("price"), rs.getBoolean("active"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
 }

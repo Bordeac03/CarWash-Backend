@@ -123,7 +123,7 @@ public class AuthController {
 			return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
 		}
 
-		user = new User(null, fullName, email, "", "user", true);
+		user = new User(null, fullName, email, "", "client", true);
 		user = userService.saveUser(user);
 		user.setPassword(getSHA256Hash(password, user.getId()));
 		user = userService.updateUser(user);

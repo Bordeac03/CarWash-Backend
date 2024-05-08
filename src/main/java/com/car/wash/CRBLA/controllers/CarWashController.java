@@ -16,31 +16,39 @@ import org.springframework.web.bind.annotation.RestController;
 import com.car.wash.CRBLA.domain.CarWash;
 import com.car.wash.CRBLA.domain.Order;
 import com.car.wash.CRBLA.services.CarWashService;
+import com.car.wash.CRBLA.services.UserService;
 
 @RestController
 @RequestMapping("/carwash")
 public class CarWashController {
 
     private final CarWashService carWashService;
+    private final UserService userService;
 
-    public CarWashController(CarWashService carWashService) {
+    public CarWashController(CarWashService carWashService, UserService userService) {
         this.carWashService = carWashService;
+        this.userService = userService;
     }
 
     @GetMapping("/order")
     @ResponseBody
     public ResponseEntity<String> getAllOrders() {
-        Long cwID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CarWash cw = carWashService.findCarWashesByLocation(cwID);
+        Long userID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CarWash cw = carWashService.findCarWasheByUserId(userID);
         List<Order> orders = carWashService.findOrdersByCarWashId(cw.getId());
-        return new ResponseEntity<>(orders.toString(), HttpStatus.OK);
+        String result = "[";
+        for (Order order : orders) {
+            result += order.toStringFull(carWashService.findServiceById(order.getServiceID()), userService.findById(order.getUserID())) + ",";
+        }
+        result = result.substring(0, result.length() - 1) + "]";
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PatchMapping("/order")
     @ResponseBody
     public ResponseEntity<String> patchOrder(@RequestBody Map<String, String> params) {
-        Long cwID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userID = Long.parseLong(params.get("userID"));
+        Long userID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long cwID = carWashService.findCarWasheByUserId(userID).getId();
         List<Order> orders = carWashService.findOrdersActiveByUserId(userID);
         orders.forEach(order -> {
             if (order.getCarWashID() != cwID) {

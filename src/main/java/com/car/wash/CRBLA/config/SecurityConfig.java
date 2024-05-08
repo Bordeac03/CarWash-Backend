@@ -29,7 +29,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/admin/**").hasRole("admin")
+                        .requestMatchers("/carwash/**").hasRole("carwash")
+                        .requestMatchers("/client/**").hasRole("client")
+                        .anyRequest().denyAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

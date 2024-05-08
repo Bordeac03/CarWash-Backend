@@ -14,4 +14,9 @@ public class User {
     private String password;
     private String role;
     private Boolean active;
+
+    @Override
+    public String toString() {
+        return "{\"ID\":\"" + id + "\",\"fullName\":\"" + fullName + "\",\"email\":\"" + email + "\",\"role\":\"" + role + "\",\"active\":\"" + active + "\"}";
+    }
 } 
