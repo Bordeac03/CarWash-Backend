@@ -19,13 +19,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AdminServiceImplementation extends CoreJDBCDao implements AdminService {
-    
+
     @Override
     public CarWash addCarWash(CarWash carWash) {
         String sql = "INSERT INTO carWash (name, address, latitude, longitude, active, openTime, contact) VALUES (?, ?, ?, ?, ?, ?, ?);";
         try (
-            PreparedStatement addCarWash = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-        ) {
+                PreparedStatement addCarWash = connection.prepareStatement(sql,
+                        PreparedStatement.RETURN_GENERATED_KEYS);) {
             addCarWash.setString(1, carWash.getName());
             addCarWash.setString(2, carWash.getAddress());
             addCarWash.setDouble(3, carWash.getLatitude());
@@ -35,7 +35,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             addCarWash.setString(7, carWash.getContact());
             addCarWash.executeUpdate();
             ResultSet rs = addCarWash.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 carWash.setId(rs.getLong(1));
             }
             System.out.println("Car wash added" + carWash.toString());
@@ -52,13 +52,12 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         String sql = "SELECT * FROM carWash WHERE name LIKE ? OR address LIKE ? LIMIT ?,?;";
         String countSql = "SELECT COUNT(*) FROM carWash WHERE name LIKE ? OR address LIKE ?;";
         try (
-            PreparedStatement getCount = connection.prepareStatement(countSql);
-            PreparedStatement getCarWash = connection.prepareStatement(sql);
-        ) {
+                PreparedStatement getCount = connection.prepareStatement(countSql);
+                PreparedStatement getCarWash = connection.prepareStatement(sql);) {
             getCount.setString(1, "%" + searchString + "%");
             getCount.setString(2, "%" + searchString + "%");
             ResultSet countRs = getCount.executeQuery();
-            if(countRs.next()) {
+            if (countRs.next()) {
                 total = countRs.getInt(1);
             }
 
@@ -100,14 +99,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
     public boolean carWashExists(Long ID) {
         String sql = "SELECT 1 FROM carWash WHERE id = ?;";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, ID);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
@@ -115,14 +114,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
     public boolean orderExists(Long ID) {
         String sql = "SELECT 1 FROM bookings WHERE id = ?;";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, ID);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
@@ -130,14 +129,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
     public boolean serviceExists(Long ID) {
         String sql = "SELECT 1 FROM carWashService WHERE id = ?;";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, ID);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
@@ -164,7 +163,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             sql.append("longitude = ?, ");
             parameters.add(carWash.getLongitude());
         }
-        if (carWash.isActive() == false || carWash.isActive() == true){
+        if (carWash.isActive() == false || carWash.isActive() == true) {
             sql.append("active = ?, ");
             parameters.add(carWash.isActive());
         }
@@ -178,22 +177,21 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
         sql.deleteCharAt(sql.length() - 2);
         sql.append(" WHERE id = ?;");
-        if(!carWashExists(carWash.getId())) {
+        if (!carWashExists(carWash.getId())) {
             throw new IllegalArgumentException("CarWash with given ID does not exist!");
         } else {
             parameters.add(carWash.getId());
         }
 
         try (
-            PreparedStatement updateCarWash = connection.prepareStatement(sql.toString());
-        ) {
+                PreparedStatement updateCarWash = connection.prepareStatement(sql.toString());) {
             for (int i = 0; i < parameters.size(); i++) {
                 updateCarWash.setObject(i + 1, parameters.get(i));
             }
             updateCarWash.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }  
+        }
         return carWash;
 
     }
@@ -206,12 +204,11 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         String deleteCarWashSql = "DELETE FROM carWash WHERE id = ?;";
 
         try (
-            PreparedStatement deleteServicesStmt = connection.prepareStatement(deleteServiceSql);
-            PreparedStatement deleteCarWashStmt = connection.prepareStatement(deleteCarWashSql);
-            PreparedStatement deleteConfigStmt = connection.prepareStatement(deleteConfigSql);
-            PreparedStatement deleteBookingStmt = connection.prepareStatement(deleteBookingSql);
-        ) {
-            if(!carWashExists(carWash.getId())) {
+                PreparedStatement deleteServicesStmt = connection.prepareStatement(deleteServiceSql);
+                PreparedStatement deleteCarWashStmt = connection.prepareStatement(deleteCarWashSql);
+                PreparedStatement deleteConfigStmt = connection.prepareStatement(deleteConfigSql);
+                PreparedStatement deleteBookingStmt = connection.prepareStatement(deleteBookingSql);) {
+            if (!carWashExists(carWash.getId())) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
                 deleteServicesStmt.setLong(1, carWash.getId());
@@ -238,18 +235,17 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         ArrayList<Order> orderList = new ArrayList<Order>();
         int total = 0;
         String sql = "SELECT bookings.*, users.username FROM bookings " +
-                    "LEFT JOIN users ON bookings.userID = users.id " +
-                    "WHERE (bookings.booking_name LIKE ? OR users.username LIKE ?) " +
-                    "AND bookings.carWashID = ? " +
-                    "ORDER BY bookings.ts " + (descending == 0 ? "ASC" : "DESC") + " " +
-                    "LIMIT ? OFFSET ?";
+                "LEFT JOIN users ON bookings.userID = users.id " +
+                "WHERE (bookings.booking_name LIKE ? OR users.username LIKE ?) " +
+                "AND bookings.carWashID = ? " +
+                "ORDER BY bookings.ts " + (descending == 0 ? "ASC" : "DESC") + " " +
+                "LIMIT ? OFFSET ?";
         String countSql = "SELECT COUNT(*) FROM bookings WHERE booking_name LIKE ? OR userID IN (SELECT id FROM users WHERE username LIKE ?);";
 
         try (
-            PreparedStatement searchBookings = connection.prepareStatement(sql);
-            PreparedStatement getCount = connection.prepareStatement(countSql);
-        ) {
-            if(!carWashExists(carWashID)) {
+                PreparedStatement searchBookings = connection.prepareStatement(sql);
+                PreparedStatement getCount = connection.prepareStatement(countSql);) {
+            if (!carWashExists(carWashID)) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             }
 
@@ -264,7 +260,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             getCount.setString(2, "%" + searchString + "%");
             ResultSet countRs = getCount.executeQuery();
 
-            if(countRs.next()) {
+            if (countRs.next()) {
                 total = countRs.getInt(1);
             }
 
@@ -302,11 +298,10 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     public boolean finishOrder(Long orderID, boolean status) {
         String sql = "UPDATE bookings SET active = ? WHERE id = ?;";
         try (
-            PreparedStatement finishOrder = connection.prepareStatement(sql);
-        ) {
+                PreparedStatement finishOrder = connection.prepareStatement(sql);) {
             finishOrder.setBoolean(1, status);
 
-            if(!orderExists(orderID)) {
+            if (!orderExists(orderID)) {
                 throw new IllegalArgumentException("Order with given ID does not exist!");
             } else {
                 finishOrder.setLong(2, orderID);
@@ -314,7 +309,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
             int rowsUpdated = finishOrder.executeUpdate();
 
-            if(rowsUpdated > 0) {
+            if (rowsUpdated > 0) {
                 return true;
             }
         } catch (SQLException e) {
@@ -328,15 +323,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         ArrayList<Product> productList = new ArrayList<Product>();
         int total = 0;
         String sql = "SELECT * FROM carWashService WHERE name LIKE ? AND carWashID = ? LIMIT ?,?;";
-        String countSql = "SELECT COUNT(*) FROM carWashService WHERE name LIKE ?;";
+        String countSql = "SELECT COUNT(*) FROM carWashService WHERE name LIKE ? AND carWashID = ?;";
 
         try (
-            PreparedStatement searchServices = connection.prepareStatement(sql);
-            PreparedStatement getCount = connection.prepareStatement(countSql);
-        ) {
+                PreparedStatement searchServices = connection.prepareStatement(sql);
+                PreparedStatement getCount = connection.prepareStatement(countSql);) {
             searchServices.setString(1, "%" + searchString + "%");
 
-            if(!carWashExists(carwashID)) {
+            if (!carWashExists(carwashID)) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
                 searchServices.setLong(2, carwashID);
@@ -347,9 +341,10 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             ResultSet rs = searchServices.executeQuery();
 
             getCount.setString(1, "%" + searchString + "%");
+            getCount.setLong(2, carwashID);
             ResultSet countRs = getCount.executeQuery();
 
-            if(countRs.next()) {
+            if (countRs.next()) {
                 total = countRs.getInt(1);
             }
 
@@ -384,21 +379,21 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     public Product addService(Product product) {
         String sql = "INSERT INTO carWashService (name, carWashID, price, active) VALUES (?, ?, ?, ?);";
         try (
-            PreparedStatement addService = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-        ) {
+                PreparedStatement addService = connection.prepareStatement(sql,
+                        PreparedStatement.RETURN_GENERATED_KEYS);) {
             addService.setString(1, product.getName());
 
-            if(!carWashExists(product.getCarWashID())) {
+            if (!carWashExists(product.getCarWashID())) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
                 addService.setLong(2, product.getCarWashID());
             }
-            
+
             addService.setDouble(3, product.getPrice());
             addService.setBoolean(4, product.isActive());
             addService.executeUpdate();
             ResultSet rs = addService.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 product.setId(rs.getLong(1));
             }
         } catch (SQLException e) {
@@ -417,7 +412,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             parameters.add(product.getName());
         }
         if (product.getCarWashID() != null) {
-            if(!carWashExists(product.getCarWashID())) {
+            if (!carWashExists(product.getCarWashID())) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
                 sql.append("carWashID = ?, ");
@@ -428,21 +423,20 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             sql.append("price = ?, ");
             parameters.add(product.getPrice());
         }
-        if (product.isActive() == false || product.isActive() == true){
+        if (product.isActive() == false || product.isActive() == true) {
             sql.append("active = ?, ");
             parameters.add(product.isActive());
         }
         sql.deleteCharAt(sql.length() - 2);
         sql.append(" WHERE id = ?;");
-        if(!serviceExists(product.getId())) {
+        if (!serviceExists(product.getId())) {
             throw new IllegalArgumentException("Service with given ID does not exist!");
         } else {
             parameters.add(product.getId());
         }
 
         try (
-            PreparedStatement updateService = connection.prepareStatement(sql.toString());
-        ) {
+                PreparedStatement updateService = connection.prepareStatement(sql.toString());) {
             for (int i = 0; i < parameters.size(); i++) {
                 updateService.setObject(i + 1, parameters.get(i));
             }
@@ -458,9 +452,8 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     public Product deleteService(Product product) {
         String sql = "DELETE FROM carWashService WHERE id = ?;";
         try (
-            PreparedStatement deleteService = connection.prepareStatement(sql);
-        ) {
-            if(!serviceExists(product.getId())) {
+                PreparedStatement deleteService = connection.prepareStatement(sql);) {
+            if (!serviceExists(product.getId())) {
                 throw new IllegalArgumentException("Service with given ID does not exist!");
             } else {
                 deleteService.setLong(1, product.getId());
@@ -477,22 +470,21 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         ArrayList<User> userList = new ArrayList<User>();
         int total = 0;
         String sql = "SELECT user.* FROM user " +
-             "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
-             "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ? " +
-             "LIMIT ?,?;";
+                "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
+                "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ? " +
+                "LIMIT ?,?;";
 
         String countSql = "SELECT COUNT(*) FROM user " +
-                        "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
-                        "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ?;";
-        
+                "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
+                "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ?;";
+
         try (
-            PreparedStatement searchUsers = connection.prepareStatement(sql);
-            PreparedStatement getCount = connection.prepareStatement(countSql);
-        ) {
+                PreparedStatement searchUsers = connection.prepareStatement(sql);
+                PreparedStatement getCount = connection.prepareStatement(countSql);) {
             searchUsers.setString(1, "%" + searchString + "%");
             searchUsers.setString(2, "%" + searchString + "%");
 
-            if(!carWashExists(carWashID)) {
+            if (!carWashExists(carWashID)) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
                 searchUsers.setLong(3, carWashID);
@@ -505,7 +497,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             getCount.setString(1, "%" + searchString + "%");
             getCount.setString(2, "%" + searchString + "%");
 
-            if(!carWashExists(carWashID)) {
+            if (!carWashExists(carWashID)) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
                 getCount.setLong(3, carWashID);
@@ -513,7 +505,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
             ResultSet countRs = getCount.executeQuery();
 
-            if(countRs.next()) {
+            if (countRs.next()) {
                 total = countRs.getInt(1);
             }
 
@@ -542,7 +534,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
+
         return json;
     }
 
@@ -551,15 +543,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         String sql = "INSERT INTO user (email, password, fullName, active, role) VALUES (?, ?, ?, ?, ?);";
         String carWashConfigSql = "INSERT INTO carWashConfig (userID, carWashID) VALUES (?, ?);";
         try (
-            PreparedStatement addUser = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            PreparedStatement addCarWashConfig = connection.prepareStatement(carWashConfigSql);
-        ) {
+                PreparedStatement addUser = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+                PreparedStatement addCarWashConfig = connection.prepareStatement(carWashConfigSql);) {
             addUser.setString(1, user.getEmail());
             addUser.setString(2, user.getPassword());
             addUser.setString(3, user.getFullName());
             addUser.setBoolean(4, user.getActive());
             System.out.println(user.getRole() + "IM HERE");
-            if(!(user.getRole()).equals("carwash")) {
+            if (!(user.getRole()).equals("carwash")) {
                 throw new IllegalArgumentException("User role must be carwash!");
             } else {
                 addUser.setString(5, user.getRole());
@@ -567,11 +558,11 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
             addUser.executeUpdate();
             ResultSet rs = addUser.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 user.setId(rs.getLong(1));
                 addCarWashConfig.setLong(1, user.getId());
 
-                if(!carWashExists(carWashID)) {
+                if (!carWashExists(carWashID)) {
                     throw new IllegalArgumentException("CarWash with given ID does not exist!");
                 } else {
                     addCarWashConfig.setLong(2, carWashID);
@@ -608,15 +599,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
         sql.deleteCharAt(sql.length() - 2);
         sql.append(" WHERE id = ?;");
-        if(!serviceExists(Long.parseLong(id))) {
+        if (!serviceExists(Long.parseLong(id))) {
             throw new IllegalArgumentException("Service with given ID does not exist!");
         } else {
             parameters.add(Long.parseLong(id));
         }
 
         try (
-            PreparedStatement updateService = connection.prepareStatement(sql.toString());
-        ) {
+                PreparedStatement updateService = connection.prepareStatement(sql.toString());) {
             for (int i = 0; i < parameters.size(); i++) {
                 updateService.setObject(i + 1, parameters.get(i));
             }
@@ -626,27 +616,29 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
 
         try (
-            PreparedStatement searchConfig = connection.prepareStatement("SELECT * FROM carWashConfig WHERE userID = ?;");
-        ) {
+                PreparedStatement searchConfig = connection
+                        .prepareStatement("SELECT * FROM carWashConfig WHERE userID = ?;");) {
             searchConfig.setLong(1, Long.parseLong(id));
             ResultSet rs = searchConfig.executeQuery();
-            if(rs.next()) {
-                if(carWashID != null) {
-                    if(!carWashExists(Long.parseLong(carWashID))) {
+            if (rs.next()) {
+                if (carWashID != null) {
+                    if (!carWashExists(Long.parseLong(carWashID))) {
                         throw new IllegalArgumentException("CarWash with given ID does not exist!");
                     } else {
-                        PreparedStatement updateConfig = connection.prepareStatement("UPDATE carWashConfig SET carWashID = ? WHERE userID = ?;");
+                        PreparedStatement updateConfig = connection
+                                .prepareStatement("UPDATE carWashConfig SET carWashID = ? WHERE userID = ?;");
                         updateConfig.setLong(1, Long.parseLong(carWashID));
                         updateConfig.setLong(2, Long.parseLong(id));
                         updateConfig.executeUpdate();
                     }
                 }
             } else {
-                if(carWashID != null) {
-                    if(!carWashExists(Long.parseLong(carWashID))) {
+                if (carWashID != null) {
+                    if (!carWashExists(Long.parseLong(carWashID))) {
                         throw new IllegalArgumentException("CarWash with given ID does not exist!");
                     } else {
-                        PreparedStatement addConfig = connection.prepareStatement("INSERT INTO carWashConfig (userID, carWashID) VALUES (?, ?);");
+                        PreparedStatement addConfig = connection
+                                .prepareStatement("INSERT INTO carWashConfig (userID, carWashID) VALUES (?, ?);");
                         addConfig.setLong(1, Long.parseLong(id));
                         addConfig.setLong(2, Long.parseLong(carWashID));
                         addConfig.executeUpdate();
