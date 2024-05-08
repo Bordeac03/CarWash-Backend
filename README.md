@@ -57,7 +57,7 @@
         "ID": carwash.id
     } (make sure to delete its services from the database) -> return (JSON): {} -->
 
-    NEEDS TESTING
+    NEEDS TESTING - probleme la query trebuie order by ts de la booking si paramtrul spune daca e ascending sau descending
     <!-- -> GET: /admin/carwash/orders - query params: search=?, page=?, limit=?, orderBy=?, carWashID=? (
        -> search: Vei primi un string cu numele serviciului sau username si vei cauta toate comenzile care contin acel string in nume sau apartin acelui user, daca nu primesti nimic, vei returna toate comenzile in limita paginarii
        -> page: la fel ca la carwash-uri
@@ -78,7 +78,7 @@
             "total": total_orders (numarul total de comenzi care corespund query-ului)
         }
      -->
-     NEEDS TESTING
+     NEEDS TESTING - kinda works
     <!-- -> PATCH: /admin/carwash/orders - request body: {
         "ID": order.id,
         "status": order.status
@@ -148,3 +148,84 @@
     } (
         Adaugi utilizator cu rol specific si il legi de carwash-ul specific in tabela carWashConfig
     ) -> return (JSON): {} -->
+
+    -> PATCH: /admin/carwash/users - (
+        -> doar ID-ul user-ului va fi mereu primit
+    ) - request body: {
+        "ID": user.id,
+        "email": user.email,
+        "password": user.password,
+        "fullname": user.fullname,
+        "role": user.role,
+        "active": user.active,
+    } -> return (JSON): {}
+
+    -> DELETE: /admin/carwash/users - request body: {
+        "ID": user.id
+    } -> return (JSON): {}
+
+3. CARWASH CONTROLLER MODULE
+    -> LOGIN -> token de carwash
+    -> REGISTER -> doar adminul poate sa inregistreze un carwash (deja implementat mai sus)
+
+    -> GET: /carwash/orders - query params: search=?, page=?, limit=?, orderBy=? (
+        -> search: Vei primi un string cu numele serviciului sau username si vei cauta toate comenzile care contin acel string in nume sau apartin acelui user, daca nu primesti nimic, vei returna toate comenzile in limita paginarii
+        -> page: la fel ca la carwash-uri
+        -> limit: la fel ca la carwash-uri
+        -> orderBy: "ascending" sau "descending" (default "ascending") - va fi folosit pentru a sorta comenzile dupa data (sorteaza dupa ts)
+    ) -> return (JSON): {
+            "orders": [
+                {
+                    "ID": order.id,
+                    "service": order.service,
+                    "carwash": order.carwash,
+                    "user": order.user,
+                    "status": order.status,
+                    "ts": order.ts,
+                }, ...
+            ],
+            "total": total_orders (numarul total de comenzi care corespund query-ului)
+        }
+
+    -> PATCH: /carwash/orders - request body: {
+        "ID": order.id,
+        "status": order.status
+    } -> return (JSON): {}
+    
+    -> DELETE: /carwash/orders - request body: {
+        "ID": order.id
+    } -> return (JSON): {}
+
+    -> POST: /carwash/services - request body: {
+        "name": service.name,
+        "price": service.price,
+        "active": service.active,
+        "carwashID": service.carwashID
+    } -> return (JSON): {}
+
+    -> PATCH: /carwash/services - request body: {
+        "ID": service.id,
+        "name": service.name,
+        "price": service.price,
+        "active": service.active,
+    } -> return (JSON): {}
+
+    -> DELETE: /carwash/services - request body: {
+        "ID": service.id
+    } -> return (JSON): {}
+
+    -> GET /carwash/service - query params: search=?, page=?, limit=? (
+        -> search: Vei primi un string cu numele serviciului si vei cauta toate serviciile care contin acel string in nume, daca nu primesti nimic, vei returna toate serviciile in limita paginarii
+        -> page: la fel ca la carwash-uri
+        -> limit: la fel ca la carwash-uri
+    ) -> return (JSON): {
+            "services": [
+                {
+                    "ID": service.id,
+                    "name": service.name,
+                    "price": service.price,
+                    "active": service.active,
+                }, ...
+            ],
+            "total": total_services (numarul total de servicii care corespund query-ului)
+        }
