@@ -88,8 +88,8 @@ public class AdminController {
     // TESTING NEEDED
     @GetMapping("/carwash/orders")
     @ResponseBody
-    public ResponseEntity<String> searchOrders(@RequestParam String searchString, @RequestParam int pageNumber, @RequestParam int limit, @RequestParam String orderBy, @RequestParam Long carWashID) {
-        return new ResponseEntity<>(adminService.searchOrders(searchString, pageNumber, limit, orderBy, carWashID), HttpStatus.OK);
+    public ResponseEntity<String> searchOrders(@RequestParam String searchString, @RequestParam int pageNumber, @RequestParam int limit, @RequestParam int descending, @RequestParam Long carWashID) {
+        return new ResponseEntity<>(adminService.searchOrders(searchString, pageNumber, limit, descending, carWashID), HttpStatus.OK);
     }
 
     // TESTING NEEDED
@@ -157,6 +157,13 @@ public class AdminController {
         newUser.setRole(entity.get("role"));
         newUser.setActive(Boolean.parseBoolean(entity.get("active")));
         return new ResponseEntity<>(adminService.addUser(newUser, Long.parseLong(entity.get("carWashID"))).toString(), HttpStatus.OK);
+    }
+
+    @PatchMapping("/carwash/users")
+    @ResponseBody
+    public ResponseEntity<String> patchUser(@RequestBody Map<String, String> entity) {
+        adminService.updateUser(entity.getOrDefault("id", null), entity.getOrDefault("fullName", null), entity.getOrDefault("email", null), entity.getOrDefault("role", null), entity.getOrDefault("active", null), entity.getOrDefault("carWashID", null));
+        return new ResponseEntity<>("{}", HttpStatus.OK);
     }
     
     

@@ -164,7 +164,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             sql.append("longitude = ?, ");
             parameters.add(carWash.getLongitude());
         }
-        if (carWash.isActive() != false || carWash.isActive() != true){
+        if (carWash.isActive() == false || carWash.isActive() == true){
             sql.append("active = ?, ");
             parameters.add(carWash.isActive());
         }
@@ -201,17 +201,27 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     @Override
     public CarWash deleteCarWash(CarWash carWash) {
         String deleteServiceSql = "DELETE FROM carWashService WHERE carWashId = ?;";
+        String deleteConfigSql = "DELETE FROM carWashConfig WHERE carWashId = ?;";
+        String deleteBookingSql = "DELETE FROM booking WHERE carWashId = ?;";
         String deleteCarWashSql = "DELETE FROM carWash WHERE id = ?;";
 
         try (
             PreparedStatement deleteServicesStmt = connection.prepareStatement(deleteServiceSql);
             PreparedStatement deleteCarWashStmt = connection.prepareStatement(deleteCarWashSql);
+            PreparedStatement deleteConfigStmt = connection.prepareStatement(deleteConfigSql);
+            PreparedStatement deleteBookingStmt = connection.prepareStatement(deleteBookingSql);
         ) {
             if(!carWashExists(carWash.getId())) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
                 deleteServicesStmt.setLong(1, carWash.getId());
                 deleteServicesStmt.executeUpdate();
+
+                deleteConfigStmt.setLong(1, carWash.getId());
+                deleteConfigStmt.executeUpdate();
+
+                deleteBookingStmt.setLong(1, carWash.getId());
+                deleteBookingStmt.executeUpdate();
 
                 deleteCarWashStmt.setLong(1, carWash.getId());
                 deleteCarWashStmt.executeUpdate();
@@ -224,14 +234,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     }
 
     @Override
-    public String searchOrders(String searchString, int pageNumber, int limit, String orderBy, Long carWashID) {
+    public String searchOrders(String searchString, int pageNumber, int limit, int descending, Long carWashID) {
         ArrayList<Order> orderList = new ArrayList<Order>();
         int total = 0;
         String sql = "SELECT bookings.*, users.username FROM bookings " +
                     "LEFT JOIN users ON bookings.userID = users.id " +
                     "WHERE (bookings.booking_name LIKE ? OR users.username LIKE ?) " +
                     "AND bookings.carWashID = ? " +
-                    "ORDER BY " + orderBy + " " +
+                    "ORDER BY bookings.ts " + (descending == 0 ? "ASC" : "DESC") + " " +
                     "LIMIT ? OFFSET ?";
         String countSql = "SELECT COUNT(*) FROM bookings WHERE booking_name LIKE ? OR userID IN (SELECT id FROM users WHERE username LIKE ?);";
 
@@ -294,7 +304,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         try (
             PreparedStatement finishOrder = connection.prepareStatement(sql);
         ) {
-            finishOrder.setBoolean(1, true);
+            finishOrder.setBoolean(1, status);
 
             if(!orderExists(orderID)) {
                 throw new IllegalArgumentException("Order with given ID does not exist!");
@@ -418,7 +428,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             sql.append("price = ?, ");
             parameters.add(product.getPrice());
         }
-        if (product.isActive() != false || product.isActive() != true){
+        if (product.isActive() == false || product.isActive() == true){
             sql.append("active = ?, ");
             parameters.add(product.isActive());
         }
@@ -573,5 +583,78 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             e.printStackTrace();
         }
         return user;
+    }
+
+    @Override
+    public void updateUser(String id, String fullname, String email, String role, String active, String carWashID) {
+        StringBuilder sql = new StringBuilder("UPDATE carWashService SET ");
+
+        List<Object> parameters = new ArrayList<>();
+        if (fullname != null) {
+            sql.append("fullName = ?, ");
+            parameters.add(fullname);
+        }
+        if (email != null) {
+            sql.append("email = ?, ");
+            parameters.add(email);
+        }
+        if (role != null) {
+            sql.append("role = ?, ");
+            parameters.add(role);
+        }
+        if (active != null) {
+            sql.append("active = ?, ");
+            parameters.add(Boolean.parseBoolean(active));
+        }
+        sql.deleteCharAt(sql.length() - 2);
+        sql.append(" WHERE id = ?;");
+        if(!serviceExists(Long.parseLong(id))) {
+            throw new IllegalArgumentException("Service with given ID does not exist!");
+        } else {
+            parameters.add(Long.parseLong(id));
+        }
+
+        try (
+            PreparedStatement updateService = connection.prepareStatement(sql.toString());
+        ) {
+            for (int i = 0; i < parameters.size(); i++) {
+                updateService.setObject(i + 1, parameters.get(i));
+            }
+            updateService.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (
+            PreparedStatement searchConfig = connection.prepareStatement("SELECT * FROM carWashConfig WHERE userID = ?;");
+        ) {
+            searchConfig.setLong(1, Long.parseLong(id));
+            ResultSet rs = searchConfig.executeQuery();
+            if(rs.next()) {
+                if(carWashID != null) {
+                    if(!carWashExists(Long.parseLong(carWashID))) {
+                        throw new IllegalArgumentException("CarWash with given ID does not exist!");
+                    } else {
+                        PreparedStatement updateConfig = connection.prepareStatement("UPDATE carWashConfig SET carWashID = ? WHERE userID = ?;");
+                        updateConfig.setLong(1, Long.parseLong(carWashID));
+                        updateConfig.setLong(2, Long.parseLong(id));
+                        updateConfig.executeUpdate();
+                    }
+                }
+            } else {
+                if(carWashID != null) {
+                    if(!carWashExists(Long.parseLong(carWashID))) {
+                        throw new IllegalArgumentException("CarWash with given ID does not exist!");
+                    } else {
+                        PreparedStatement addConfig = connection.prepareStatement("INSERT INTO carWashConfig (userID, carWashID) VALUES (?, ?);");
+                        addConfig.setLong(1, Long.parseLong(id));
+                        addConfig.setLong(2, Long.parseLong(carWashID));
+                        addConfig.executeUpdate();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
