@@ -36,11 +36,12 @@ public class CarWashController {
         Long userID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CarWash cw = carWashService.findCarWasheByUserId(userID);
         List<Order> orders = carWashService.findOrdersByCarWashId(cw.getId());
-        String result = "[";
+        String result = "{\"orders\": [";
         for (Order order : orders) {
-            result += order.toStringFull(carWashService.findServiceById(order.getServiceID()), userService.findById(order.getUserID())) + ",";
+            result += order.toStringFull(carWashService.findServiceById(order.getServiceID()),
+                    userService.findById(order.getUserID())) + ",";
         }
-        result = result.substring(0, result.length() - 1) + "]";
+        result = result.substring(0, result.length() - 1) + "]}";
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
