@@ -50,15 +50,14 @@ public class CarWashController {
     public ResponseEntity<String> patchOrder(@RequestBody Map<String, String> params) {
         Long userID = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long cwID = carWashService.findCarWasheByUserId(userID).getId();
-        List<Order> orders = carWashService.findOrdersActiveByUserId(userID);
-        orders.forEach(order -> {
-            if (order.getCarWashID() != cwID) {
-                return;
-            }
-            order.setCloseBy(true);
-            order.setActive(false);
-            carWashService.updateOrder(order);
-        });
+        Long orderID = Long.parseLong(params.get("orderID"));
+        Order order = carWashService.findOrderById(orderID);
+        if (order.getCarWashID() != cwID) {
+           return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+        }
+        order.setCloseBy(true);
+        order.setActive(false);
+        carWashService.updateOrder(order);
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 

@@ -16,4 +16,5 @@ public interface CarWashService {
     public List<Product> findServicesByCarWashId(Long id);
     public CarWash findCarWasheByUserId(Long userID);
     public Product findServiceById(Long id);
+    public Order findOrderById(Long id);
 }

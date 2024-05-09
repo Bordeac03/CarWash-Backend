@@ -90,10 +90,11 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
 
     @Override
     public void updateOrder(Order order) {
-        String sql = "UPDATE booking SET closeBy = ? WHERE ID = ?;";
+        String sql = "UPDATE booking SET closeBy = ?, active = ? WHERE ID = ?;";
         try (
                 PreparedStatement updateOrder = connection.prepareStatement(sql);) {
             updateOrder.setBoolean(1, order.getCloseBy());
+            updateOrder.setBoolean(2, order.getActive());
             updateOrder.setLong(2, order.getId());
             updateOrder.executeUpdate();
         } catch (SQLException e) {
@@ -193,5 +194,23 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
             e.printStackTrace();
         }
         return s;
+    }
+
+    @Override
+    public Order findOrderById(Long id) {
+        Order o = null;
+        String sql = "SELECT ID,userID,carWashID,serviceID,UNIX_TIMESTAMP(ts) as ts,closeBy,active FROM booking WHERE ID = ? LIMIT 1;";
+        try (
+                PreparedStatement findOrder = connection.prepareStatement(sql);) {
+            findOrder.setLong(1, id);
+            ResultSet rs = findOrder.executeQuery();
+            if (rs.next()) {
+                o = new Order(rs.getLong("ID"), rs.getLong("userID"), rs.getLong("carWashID"),
+                        rs.getLong("serviceID"), rs.getInt("ts"), rs.getBoolean("closeBy"), rs.getBoolean("active"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 }
