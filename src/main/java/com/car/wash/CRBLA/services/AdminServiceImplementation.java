@@ -230,14 +230,15 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             if (!carWashExists(carWash.getId())) {
                 throw new IllegalArgumentException("CarWash with given ID does not exist!");
             } else {
+
+                deleteBookingStmt.setLong(1, carWash.getId());
+                deleteBookingStmt.executeUpdate();
+                
                 deleteServicesStmt.setLong(1, carWash.getId());
                 deleteServicesStmt.executeUpdate();
 
                 deleteConfigStmt.setLong(1, carWash.getId());
                 deleteConfigStmt.executeUpdate();
-
-                deleteBookingStmt.setLong(1, carWash.getId());
-                deleteBookingStmt.executeUpdate();
 
                 deleteCarWashStmt.setLong(1, carWash.getId());
                 deleteCarWashStmt.executeUpdate();
