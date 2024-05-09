@@ -1,5 +1,8 @@
 package com.car.wash.CRBLA.services;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +22,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AdminServiceImplementation extends CoreJDBCDao implements AdminService {
+
+    public String getSHA256Hash(String input, Long salt) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			String saltedInput = input + salt;
+			byte[] hash = md.digest(saltedInput.getBytes(StandardCharsets.UTF_8));
+			BigInteger number = new BigInteger(1, hash);
+			StringBuilder hexString = new StringBuilder(number.toString(16));
+			while (hexString.length() < 32) {
+				hexString.insert(0, '0');
+			}
+			return hexString.toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
     @Override
     public CarWash addCarWash(CarWash carWash) {
@@ -542,25 +561,26 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     public User addUser(User user, Long carWashID) {
         String sql = "INSERT INTO user (email, password, fullName, active, role) VALUES (?, ?, ?, ?, ?);";
         String carWashConfigSql = "INSERT INTO carWashConfig (userID, carWashID) VALUES (?, ?);";
+        String passwordSql = "UPDATE user SET password = ? WHERE id = ?;";
         try (
                 PreparedStatement addUser = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-                PreparedStatement addCarWashConfig = connection.prepareStatement(carWashConfigSql);) {
+                PreparedStatement addCarWashConfig = connection.prepareStatement(carWashConfigSql);
+                PreparedStatement setPassword = connection.prepareStatement(passwordSql);
+            ) {
             addUser.setString(1, user.getEmail());
             addUser.setString(2, user.getPassword());
             addUser.setString(3, user.getFullName());
             addUser.setBoolean(4, user.getActive());
-            System.out.println(user.getRole() + "IM HERE");
-            if (!(user.getRole()).equals("carwash")) {
-                throw new IllegalArgumentException("User role must be carwash!");
-            } else {
-                addUser.setString(5, user.getRole());
-            }
+            addUser.setString(5, user.getRole());
 
             addUser.executeUpdate();
             ResultSet rs = addUser.getGeneratedKeys();
             if (rs.next()) {
                 user.setId(rs.getLong(1));
+                user.setPassword(getSHA256Hash(user.getPassword(), user.getId()));
                 addCarWashConfig.setLong(1, user.getId());
+                setPassword.setString(1, user.getPassword());
+                setPassword.setLong(2, user.getId());
 
                 if (!carWashExists(carWashID)) {
                     throw new IllegalArgumentException("CarWash with given ID does not exist!");
@@ -569,6 +589,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
                 }
 
                 addCarWashConfig.executeUpdate();
+                setPassword.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
