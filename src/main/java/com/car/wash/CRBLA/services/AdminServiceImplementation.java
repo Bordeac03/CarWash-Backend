@@ -233,7 +233,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
                 deleteBookingStmt.setLong(1, carWash.getId());
                 deleteBookingStmt.executeUpdate();
-                
+
                 deleteServicesStmt.setLong(1, carWash.getId());
                 deleteServicesStmt.executeUpdate();
 
@@ -490,12 +490,12 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         ArrayList<User> userList = new ArrayList<User>();
         int total = 0;
         String sql = "SELECT user.* FROM user " +
-                "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
+                "JOIN carWashConfig ON user.id = carWashConfig.userID " +
                 "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ? " +
                 "LIMIT ?,?;";
 
         String countSql = "SELECT COUNT(*) FROM user " +
-                "LEFT JOIN carWashConfig ON user.id = carWashConfig.userID " +
+                "JOIN carWashConfig ON user.id = carWashConfig.userID " +
                 "WHERE (user.fullName LIKE ? OR user.email LIKE ?) AND carWashConfig.carWashID = ?;";
 
         try (
