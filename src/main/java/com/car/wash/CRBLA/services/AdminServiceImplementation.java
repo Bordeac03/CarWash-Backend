@@ -637,6 +637,10 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
             e.printStackTrace();
         }
 
+        if (role != null && !role.equals("carwash")) {
+            return;
+        }
+
         try (
                 PreparedStatement searchConfig = connection
                         .prepareStatement("SELECT * FROM carWashConfig WHERE userID = ?;");) {
