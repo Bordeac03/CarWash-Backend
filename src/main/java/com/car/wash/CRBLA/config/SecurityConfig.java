@@ -29,9 +29,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("admin")
                         .requestMatchers("/carwash/**").hasRole("carwash")
                         .requestMatchers("/client/**").hasRole("client")
+                        .requestMatchers("/admin/**").hasRole("admin")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
