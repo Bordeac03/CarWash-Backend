@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CardComponent from '../util/CardComponent';
 import { carwashInstance } from '../util/instances';
 
 const Home = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const intervalRef = useRef();
 
     const getOrders = () => {
         carwashInstance().get('/order')
@@ -40,6 +41,14 @@ const Home = () => {
         getOrders();
     }, []);
 
+    useEffect(() => {
+        intervalRef.current = setInterval(getOrders, 60000);
+
+        return () => {
+            clearInterval(intervalRef.current);
+        };
+    }, [orders]);
+    
   return (
     <div className='main'>
         {loading && <span className='loader'></span>}
