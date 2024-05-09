@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userService.findById(id).getRole()));
-
+        System.out.println(authorities);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 id, null, authorities);
                 
