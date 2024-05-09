@@ -95,7 +95,7 @@ public class CarWashServiceImplementation extends CoreJDBCDao implements CarWash
                 PreparedStatement updateOrder = connection.prepareStatement(sql);) {
             updateOrder.setBoolean(1, order.getCloseBy());
             updateOrder.setBoolean(2, order.getActive());
-            updateOrder.setLong(2, order.getId());
+            updateOrder.setLong(3, order.getId());
             updateOrder.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
