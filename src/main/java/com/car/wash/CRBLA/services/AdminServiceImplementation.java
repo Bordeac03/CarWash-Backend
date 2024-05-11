@@ -24,20 +24,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AdminServiceImplementation extends CoreJDBCDao implements AdminService {
 
     public String getSHA256Hash(String input, Long salt) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
-			String saltedInput = input + salt;
-			byte[] hash = md.digest(saltedInput.getBytes(StandardCharsets.UTF_8));
-			BigInteger number = new BigInteger(1, hash);
-			StringBuilder hexString = new StringBuilder(number.toString(16));
-			while (hexString.length() < 32) {
-				hexString.insert(0, '0');
-			}
-			return hexString.toString();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            String saltedInput = input + salt;
+            byte[] hash = md.digest(saltedInput.getBytes(StandardCharsets.UTF_8));
+            BigInteger number = new BigInteger(1, hash);
+            StringBuilder hexString = new StringBuilder(number.toString(16));
+            while (hexString.length() < 32) {
+                hexString.insert(0, '0');
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public CarWash addCarWash(CarWash carWash) {
@@ -566,8 +566,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         try (
                 PreparedStatement addUser = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
                 PreparedStatement addCarWashConfig = connection.prepareStatement(carWashConfigSql);
-                PreparedStatement setPassword = connection.prepareStatement(passwordSql);
-            ) {
+                PreparedStatement setPassword = connection.prepareStatement(passwordSql);) {
             addUser.setString(1, user.getEmail());
             addUser.setString(2, user.getPassword());
             addUser.setString(3, user.getFullName());
@@ -600,7 +599,7 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
     @Override
     public void updateUser(String id, String fullname, String email, String role, String active, String carWashID) {
-        StringBuilder sql = new StringBuilder("UPDATE carWashService SET ");
+        StringBuilder sql = new StringBuilder("UPDATE user SET ");
 
         List<Object> parameters = new ArrayList<>();
         if (fullname != null) {
