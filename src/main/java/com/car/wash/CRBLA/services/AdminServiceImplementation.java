@@ -161,6 +161,21 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         return false;
     }
 
+    public boolean userExists(Long ID) {
+        String sql = "SELECT 1 FROM user WHERE id = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setLong(1, ID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public CarWash updateCarWash(CarWash carWash) {
         StringBuilder sql = new StringBuilder("UPDATE carWash SET ");
@@ -620,8 +635,8 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
         }
         sql.deleteCharAt(sql.length() - 2);
         sql.append(" WHERE id = ?;");
-        if (!serviceExists(Long.parseLong(id))) {
-            throw new IllegalArgumentException("Service with given ID does not exist!");
+        if (!userExists(Long.parseLong(id))) {
+            throw new IllegalArgumentException("User with given ID does not exist!");
         } else {
             parameters.add(Long.parseLong(id));
         }
