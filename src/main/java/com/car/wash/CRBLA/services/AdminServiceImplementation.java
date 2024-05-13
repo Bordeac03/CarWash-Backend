@@ -269,13 +269,14 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
     public String searchOrders(String searchString, int pageNumber, int limit, int descending, Long carWashID) {
         ArrayList<Order> orderList = new ArrayList<Order>();
         int total = 0;
-        String sql = "SELECT bookings.*, users.username FROM bookings " +
-                "LEFT JOIN users ON bookings.userID = users.id " +
-                "WHERE (bookings.booking_name LIKE ? OR users.username LIKE ?) " +
-                "AND bookings.carWashID = ? " +
-                "ORDER BY bookings.ts " + (descending == 0 ? "ASC" : "DESC") + " " +
-                "LIMIT ? OFFSET ?";
-        String countSql = "SELECT COUNT(*) FROM bookings WHERE booking_name LIKE ? OR userID IN (SELECT id FROM users WHERE username LIKE ?);";
+        String sql = "SELECT booking.ID, booking.userID, booking.carWashID, booking.serviceID, booking.closeBy, booking.active, UNIX_TIMESTAMP(booking.ts) as ts, user.email FROM booking " +
+                                        "LEFT JOIN user ON booking.userID = user.ID " +
+                                        "WHERE (booking.ID LIKE ? OR user.email LIKE ?) " +
+                                        "AND booking.carWashID = ? " +
+                                        "ORDER BY ts " + (descending == 0 ? "ASC" : "DESC") + " " +
+                                        "LIMIT ? OFFSET ?";
+                                        
+        String countSql = "SELECT COUNT(*) FROM booking WHERE (ID LIKE ? OR userID IN (SELECT ID FROM user WHERE email LIKE ?)) AND carWashID = ?;";
 
         try (
                 PreparedStatement searchBookings = connection.prepareStatement(sql);
@@ -286,13 +287,15 @@ public class AdminServiceImplementation extends CoreJDBCDao implements AdminServ
 
             searchBookings.setString(1, "%" + searchString + "%");
             searchBookings.setString(2, "%" + searchString + "%");
-            searchBookings.setInt(3, carWashID.intValue());
-            searchBookings.setInt(3, limit);
-            searchBookings.setInt(4, (pageNumber - 1) * limit);
+            searchBookings.setLong(3, carWashID);
+            searchBookings.setInt(4, limit); // was 3
+            searchBookings.setInt(5, (pageNumber - 1) * limit); // was 4
+
             ResultSet rs = searchBookings.executeQuery();
 
             getCount.setString(1, "%" + searchString + "%");
             getCount.setString(2, "%" + searchString + "%");
+            getCount.setLong(3, carWashID);
             ResultSet countRs = getCount.executeQuery();
 
             if (countRs.next()) {
