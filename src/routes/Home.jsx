@@ -643,7 +643,7 @@ const Home = () => {
         <div>
             {ID !== null && (
                 <div className='shadow' style={{width: ID !== null ? "min(800px, 80%)" : 0, opacity: ID !== null ? 1 : 0}}>
-                    <span style={{marginLeft:'auto'}} onClick={() => {setID(null)}}>X</span>
+                    <span style={{marginLeft:'auto', cursor:'pointer'}} onClick={() => {setID(null)}}>X</span>
                     <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                         {ID === null ? (
                             <span className='arrow-back'>
@@ -690,7 +690,7 @@ const Home = () => {
 
             {ID2 !== null && (
                 <div className='shadow' style={{width: ID2 !== null ? "min(800px, 80%)" : 0, opacity: ID2 !== null ? 1 : 0}}>
-                    <span style={{marginLeft:'auto'}} onClick={() => {setID2(null)}}>X</span>
+                    <span style={{marginLeft:'auto', cursor:'pointer'}} onClick={() => {setID2(null)}}>X</span>
                     <div className='flex-space-between'>
                         <span className='arrow-back' onClick={() =>{setID(1), setID2(null)}}><IoIosArrowBack /></span>
                         <span className='order-title'>Users list for {selectedCarwash.name}</span>
@@ -791,7 +791,7 @@ const Home = () => {
 
             {ID3 !== null && (
                 <div className='shadow' style={{width: ID3 !== null ? "min(800px, 80%)" : 0, opacity: ID3 !== null ? 1 : 0}}>
-                    <span style={{marginLeft:'auto'}} onClick={() => {setID3(null)}}>X</span>
+                    <span style={{marginLeft:'auto', cursor:'pointer'}} onClick={() => {setID3(null)}}>X</span>
                     <div className='flex-space-between'>
                         <span className='arrow-back' onClick={() =>{setID2(1), setID3(null)}}><IoIosArrowBack /></span>
                         <span className='order-title'>Products page for {selectedCarwash.name}</span>

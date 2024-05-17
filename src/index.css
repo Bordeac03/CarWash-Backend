@@ -650,6 +650,10 @@ input:checked + .slider:before {
 	color: var(--darker);
 }
 
+.arrow-back, .arrow-forward {
+  cursor: pointer;
+}
+
 
 /* ================= END OF HOME STYLING ===================== */
 
