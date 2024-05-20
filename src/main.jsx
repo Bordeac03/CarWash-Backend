@@ -4,7 +4,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css'
 import { Home } from './routes/Home.jsx';
 import Order from './routes/Order.jsx';
-import AdminDashboard from './routes/AdminDashboard.jsx';
 import 'leaflet/dist/leaflet.css';
 import { UserProvider } from './util/UserContext.jsx';
 
@@ -16,11 +15,7 @@ const router = createBrowserRouter([
 	{
 		path: "/order",
 		element: <Order />,
-	},
-	{
-		path: "/admin",
-		element: <AdminDashboard />,
-	},
+	}
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
