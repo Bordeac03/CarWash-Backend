@@ -91,12 +91,27 @@ public class AuthController {
 			return new ResponseEntity<>("{}", HttpStatus.UNAUTHORIZED);
 		}
 
+		String path;
+		switch (user.getRole()) {
+			case "carwash":
+				path = "/carwash";
+				break;
+			case "admin":
+				path = "/admin";
+				break;
+			case "client":
+				path = "/client";
+				break;
+			default:
+				path = "/";
+		}
+
 		Cookie cookie = new Cookie("accessToken", generateJwtToken(user.getId(), user.getRole()));
 		Cookie cookie2 = new Cookie("isLoggedIn", "true");
 		cookie2.setMaxAge(3600);
 		cookie.setMaxAge(3600);
-		cookie2.setPath("/");
-		cookie.setPath("/");
+		cookie2.setPath(path);
+		cookie.setPath(path);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
