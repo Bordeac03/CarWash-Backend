@@ -277,11 +277,10 @@ margin-right: auto;
   width: 20vw;
   color: var(--normal);
   font-weight: bold;
-  margin-top: .3vh;
   cursor: pointer;
   gap: .5rem;
   user-select: none;
-  margin-top:-13vh;
+  margin-top:-9vh;
 }
 
 .searchContainer {
