@@ -2,6 +2,7 @@
   "name": "carwashterminal",
   "private": true,
   "version": "0.0.0",
+  "homepage": "/terminal",
   "type": "module",
   "scripts": {
     "dev": "vite",
