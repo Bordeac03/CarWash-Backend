@@ -653,6 +653,13 @@ input:checked + .slider:before {
   cursor: pointer;
 }
 
+.container {
+  width: 100%;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+
 
 /* ================= END OF HOME STYLING ===================== */
 
@@ -691,5 +698,29 @@ input:checked + .slider:before {
     --accent: black;
     --accent2: white;
     --lightGray: #7A8C8D;
+  }
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
   }
 }
